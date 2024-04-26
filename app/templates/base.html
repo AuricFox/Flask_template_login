@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="title" content="">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        {% block head %}{% endblock %}
+    </head>
+
+    <body>
+        <!--Main Navigation Tile-->
+        <div id="nav-bar">
+            <ul class="nav">
+                <li><a href="{{  url_for('main.index')  }}" class="dropbtn nav-tile {% if nav_id == 'home-page' %}active{% endif %}">Home</a></li>
+                <li><a href="{{  url_for('manage.index')  }}" class="dropbtn nav-tile {% if nav_id == 'manage-page' %}active{% endif %}">Manage</a></li>
+                <li><a href="{{  url_for('manage.add')  }}" class="dropbtn nav-tile {% if nav_id == 'add-page' %}active{% endif %}">Add Data</a></li>
+                <!-- Example Sub Navigation-->
+                <li><div class="{% if nav_id == 'example-page' %}active{% endif %}">
+                    <div class="dropbtn nav-tile">Drop Down Menu</div>
+                    <div class="dropdown-element" style="display: none;">
+                        <a class="drop-link" href="{{  url_for('main.index')  }}">Link 1</a>
+                        <a class="drop-link" href="{{  url_for('main.index')  }}">Link 2</a>
+                        <a class="drop-link" href="{{  url_for('main.index')  }}">Link 3</a>
+                    </div>
+                </div></li>
+                
+            </ul>
+            <div class="login-tile ">
+                {% if username %}
+                    <div class="login-link">{{ username }}</div>
+                    <a class="signup-link" href="{{ url_for('auth.log_out') }}">Log Out</a>
+                {% else %}
+                    <a class="login-link" href="{{  url_for('auth.login')  }}">Log in</a>
+                    <a class="signup-link" href="{{  url_for('auth.sign_up')  }}">Sign up</a>
+                {% endif %}
+                <div class="slide-bar"></div>
+            </div>
+        </div>
+       
+        <!--Contains All Content Tiles-->
+        <div class="content">
+            <!-- Side navigation content -->
+            <div class="side-nav">
+                {% block sidenav %}{% endblock %}
+            </div>
+
+            <!-- Main content section -->
+            <div class="topics">
+                <div class="main-topics">
+                    {% block content %}{% endblock %}
+                </div>
+
+                <div class="footer-tile">
+                    <footer class="footer" id="foot">
+                        <a class="info" id="about" href="{{  url_for('main.index')  }}">About</a>
+                        <a class="info" id="contact" href="{{  url_for('main.index')  }}">Contact</a>
+                        <a class="info" id="resources" href="{{  url_for('main.index')  }}">Resources</a>
+                    </footer>
+                </div>
+            </div>
+
+            <!-- Extra content section-->
+            <div class="extras">
+                {% block extras %}{% endblock %}
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        {% block scripts %}{% endblock %}
+    </body>
+    
+</html>

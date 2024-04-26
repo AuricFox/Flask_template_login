@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}View{% endblock %}
+
+{% block content %}
+
+<div class="topic">
+    <div>
+        <div class="title center-txt">ID</div>
+        <div class="description center-txt">{{ user.id | escape }}</div>
+    </div>
+    <div>
+        <div class="title center-txt">Name</div>
+        <div class="description center-txt">{{ user.name | escape }}</div>
+    </div>
+    <div>
+        <div class="title center-txt">Email</div>
+        <div class="description center-txt">{{ user.email | escape }}</div>
+    </div>
+    <div>
+        <div class="title center-txt">Password</div>
+        <div class="description center-txt">{{ user.password | escape }}</div>
+    </div>
+    <div>
+        <div class="title center-txt">Date Created</div>
+        <div class="description center-txt">{{ user.created_on | escape }}</div>
+    </div>
+    <div>
+        <div class="title center-txt">Admin Privileges</div>
+        <div class="description center-txt">{{ user.is_admin | escape }}</div>
+    </div>
+
+    <a class="link center-txt" href="{{ url_for('auth.edit_user', id=user.id) | escape }}">
+        Edit User
+    </a>
+</div>
+
+{% endblock %}

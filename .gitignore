@@ -1,0 +1,3 @@
+# Ignore log and pycache files
+logs
+__pycache__

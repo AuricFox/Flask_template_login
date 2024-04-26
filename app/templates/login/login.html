@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container {% if sign_up %}active-container{% endif %}" id="container">
+    <div class="form-container sign-up">
+        <form action="{{ url_for('auth.sign_up') }}" method="post" enctype="multipart/form-data">
+            <h1>Create Account</h1>
+            <div class="social-icons">
+                <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your email for registeration</span>
+            <input name="name" type="text" placeholder="Name">
+            <input name="email" type="email" placeholder="Email">
+            <input name="password" type="password" placeholder="Password">
+            <button class="link">Sign Up</button>
+        </form>
+    </div>
+    <div class="form-container sign-in">
+        <form action="{{ url_for('auth.login') }}" method="post" enctype="multipart/form-data">
+            <h1>Sign In</h1>
+            <div class="social-icons">
+                <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your username and password</span>
+            <input name="name" type="name" placeholder="Username">
+            <input name="password" type="password" placeholder="Password">
+            <a href="#">Forget Your Password?</a>
+            <button class="link">Sign In</button>
+        </form>
+    </div>
+    <div class="toggle-container">
+        <div class="toggle">
+            <div class="toggle-panel toggle-left">
+                <h1>Welcome Back!</h1>
+                <p>Enter your personal details to use all of site features</p>
+                <button class="hidden" id="login" onclick="toggleLogin()">Sign In</button>
+            </div>
+            <div class="toggle-panel toggle-right">
+                <h1>Welcome!</h1>
+                <p>Register with your personal details to use all of site features</p>
+                <button class="hidden" id="register" onclick="toggleLogin()">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

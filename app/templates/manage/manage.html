@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Manage{% endblock %}
+
+{% block content %}
+<div class="topic shadow">
+    <div class="title center-txt">Welcome to the Manage Page</div>
+    <div class="description center-txt" id="tutorial-description">
+        This is a defualt page used to manage the current database setup.
+    </div>
+</div>
+
+<div class="info-table">
+    <table class="shadow">
+        <thead>
+            <tr>
+                <th class="left-txt">ID</th>
+                <th class="left-txt">Name</th>
+                <th class="left-txt">Date</th>
+                <th class="left-txt">Message</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td class="info-cell">{{ row.id | escape }}</td>
+                <td class="info-cell">{{ row.name | escape }}</td>
+                <td class="info-cell">{{ row.date | escape }}</td>
+                <td class="info-cell">{{ row.message | escape }}</td>
+                
+                <td class="action-cells">
+                    <div class="action-links">
+                        <a class="action-cell view-cell" href="{{ url_for('manage.view', id=row.id) | escape }}">
+                            <img class="icon-btn" src="{{ url_for('static', filename='images/icons/view.png') }}"
+                                alt="view">
+                        </a>
+                        <a class="action-cell edit-cell" href="{{ url_for('manage.edit', id=row.id) | escape }}">
+                            <img class="icon-btn" src="{{ url_for('static', filename='images/icons/edit.png') }}"
+                                alt="edit">
+                        </a>
+                        <a class="action-cell delete-cell" href="#" data-record="{{ row.id | escape }}">
+                            <img class="icon-btn" src="{{ url_for('static', filename='images/icons/delete.png') }}"
+                                alt="delete">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

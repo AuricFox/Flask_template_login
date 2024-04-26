@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}View{% endblock %}
+
+{% block content %}
+
+<div class="topic">
+    <div>
+        <div class="title center-txt">Name</div>
+        <div class="description center-txt">{{ data.name | escape }}</div>
+    </div>
+    <div>
+        <div class="title center-txt">Date</div>
+        <div class="description center-txt">{{ data.date | escape }}</div>
+    </div>
+    {% if data.message %}
+    <div>
+        <div class="title center-txt">Message</div>
+        <div class="description center-txt">{{ data.message | escape }}</div>
+    </div>
+    {% endif %}
+
+    <a class="link center-txt" href="{{ url_for('manage.edit', id=data.id) | escape }}">
+        Edit Info
+    </a>
+</div>
+
+{% endblock %}

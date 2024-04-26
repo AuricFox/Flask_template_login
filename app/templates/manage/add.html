@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Add{% endblock %}
+
+{% block content %}
+<form class="record-form shadow" action="{{ url_for('manage.add_info') }}" method="post" enctype="multipart/form-data">
+    <div class="form-topic">
+        <label for="name" class="title">Name</label>
+        <input id="name" name="name" rows="4" placeholder="Name ...">
+    </div>
+    <div class="form-topic">
+        <label for="date" class="title">Date</label>
+        <input type="date" id="date" name="date" rows="4">
+    </div>
+    <div class="form-topic">
+        <label for="message" class="title">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Message ..."></textarea>
+    </div>
+    <button class="link center" type="submit">Add Info</button>
+</form>
+{% endblock %}
