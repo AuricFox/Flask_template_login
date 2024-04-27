@@ -148,7 +148,7 @@ application or website.
 
 ## Database Info
 
-### Current Database Schema
+### Current Database Schema:
 
 **User**  
 |**id**|name   |email   |password |created_on |is_admin |

@@ -1,6 +1,9 @@
 from flask_login import current_user
 import logging, os, re, mimetypes
 
+from app.models.models import User
+from app.extensions import db, bcrypt
+
 PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Configure the logging object
@@ -12,15 +15,15 @@ logging.basicConfig(
 
 LOGGER = logging.getLogger(__name__)
 
-# ========================================================================================================================================
+# =========================================================================================
 # Error Handling
-# ========================================================================================================================================
+# =========================================================================================
 class InvalidFile(Exception): pass
 class FileNotFound(Exception): pass
 class InvalidInput(Exception): pass
 
-# ========================================================================================================================================
-def sanitize(text:str):
+# =========================================================================================
+def sanitize(text:str) -> str:
     '''
     Removes special characters from the string.
 
@@ -32,7 +35,7 @@ def sanitize(text:str):
     '''
     return re.sub(r'[\\/*?:"<>|]', '_', text)
 
-# ========================================================================================================================================
+# =========================================================================================
 def verify_file(file:str):
     '''
     Verifies input file
@@ -73,11 +76,74 @@ def verify_file(file:str):
     except Exception as e:
         LOGGER.error(f"An error occured when validating {file}: {e}")
         return False
-    
-# ========================================================================================================================================
-def username():
+
+# =========================================================================================
+def view_user(user_id:int=None):
     '''
-    Get the username of the the current user logged in
+    Fetches the user(s) info from the database
+
+    Parameter(s):
+        user_id (int, default=None): the primary key of the user being queried
+
+    Output(s):
+        A dictionary list if user_id is None, else returns a dictionary containing the user's info
+    '''
+    # Get all user info
+    if not user_id:
+        return User.query.all()
+    
+    # Return the queried user's info
+    return User.query.filter_by(id=user_id).first()
+
+# =========================================================================================
+def add_user(username:str, email:str, password:str, is_admin:bool=False) -> bool:
+    '''
+    Adds the user info to the database
+
+    Parameter(s):
+
+    Output(s):
+        True if the user data was successfully added, else False
+    '''
+
+# =========================================================================================
+def update_user(user_id:int, name:str=None, email:str=None, password:str=None, is_admin:bool=None) -> bool:
+    '''
+    Adds the user info to the database
+
+    Parameter(s):
+
+    Output(s):
+        True if the user data was successfully added, else False
+    '''
+    try:
+        # Check if the record exists
+        user = User.query.get(user_id)
+        if user is None: 
+            return False
+
+        if name:
+            user.name = name
+        if email:
+            user.email = email
+        if password:
+            user.password = bcrypt.generate_password_hash(password)
+        if is_admin:
+            user.is_admin = is_admin
+
+        # Commit new data to the database
+        db.session.commit()
+
+    except Exception as e:
+        LOGGER.error(f"An error occured when updating the user's info: {e}")
+        return False
+    
+    return True
+ 
+# =========================================================================================
+def username() -> str:
+    '''
+    Gets the username of the logged in user
     
     Parameter(s): None
     
@@ -85,3 +151,15 @@ def username():
         The name of the user if logged in, else None
     '''
     return current_user.name if current_user.is_authenticated else None
+
+# =========================================================================================
+def is_admin() -> bool:
+    '''
+    Get the admin status of the logged in user
+    
+    Parameter(s): None
+    
+    Output(s):
+        True is the logged in user is an admin, alse False
+    '''
+    return current_user.is_admin if current_user.is_authenticated else False
