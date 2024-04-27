@@ -1,4 +1,4 @@
-# Flask Template
+# Flask Template with Login
 
 This is a template for starting web projects powered by flask. It provides basic navigation for the main pages, sub pages, and a side bar 
 for related topics.
