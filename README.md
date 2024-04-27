@@ -1,7 +1,6 @@
 # Flask Template
 
-This is a template for starting web projects powered by flask. It provides basic navigation for the main pages, sub pages, and a side bar 
-for related topics.
+This is a Flask template used for starting web projects and supports user registration and login. It provides basic navigation for the main pages, sub pages, and a side bar for related topics. The database is maintained using SQLAlchemy which currently supports a default table called Models and a User table.
 
 ## Getting Started
 
@@ -9,7 +8,7 @@ To get started, follow these steps:
 
 1. **Clone the Repository:**
     ```
-    git clone https://github.com/AuricFox/flask_template.git
+    git clone https://github.com/AuricFox/Flask_template_login.git
     ```
 
 2. **Navigate to the Project Directory:**
@@ -40,7 +39,7 @@ To get started, follow these steps:
     ```
     * Flask: a python framework for building web applications.
     * Flask-Login: provides user session management for Flask such as logging in or out.
-    * Flask-Bcrypt: a Flask extension for bcrypt hashing.
+    * Flask-Bcrypt: a Flask extension for hashing passwords.
     * Flask-Migration: an extension that handles SQLAlchemy database migrations.
     * Flask-SQLAlchemy: a Flask extension that simplifies database queries and management.
     * Flask-Testing: an extension that provides unit testing utilities for Flask.
@@ -50,7 +49,6 @@ To get started, follow these steps:
     ```
     python wsgi.py
     ```
-
     The server will start running, and you can access the application by navigating to `http://localhost:5000` in your web browser.
 
 6. **Export Secret Key:**  
@@ -80,8 +78,11 @@ have also been removed to reduce clutter.
 
 ```
 .
-flask_template
+Flask_template_login
 ├───app
+│   ├───auth
+│   │   ├───__init__.py
+|   |   └───routes.py
 │   ├───main
 │   │   ├───__init__.py
 |   |   └───routes.py
@@ -100,8 +101,11 @@ flask_template
 │   │   └───js
 |   |       └───base.js
 │   ├───templates
-|   |    ├───login
-|   |    |   └───login.html
+|   |    ├───auth
+|   |    |   ├───edit_user.html
+|   |    |   ├───login.html
+|   |    |   ├───manage_users.html
+|   |    |   └───view_user.html
 │   |    ├───manage
 |   |    |   ├───add.html
 |   |    |   ├───edit.html
@@ -112,7 +116,7 @@ flask_template
 |   |    └───index.html
 |   ├───__init__.py
 |   ├───extensions.py
-|   └───utils.py
+|   └───app_utils.py
 ├───data
 |   └───app.db
 ├───env
@@ -150,9 +154,23 @@ application or website.
 
 - **extensions.py**: Manages the flask extensions like SQLAlchemy.
 
-## Models
+## Database Info
 
-Creating Database Models
+### Current Database Schema
+
+**User**  
+|**id**|name   |email   |password |created_on |is_admin |
+|:-----:|:----:|:------:|:-------:|:---------:|:-------:|
+
+- **Primary Key:** id 
+- All feilds are none nullable
+
+**Models**  
+|**id**|name   |date   |message |
+|:-----:|:----:|:-----:|:------:|
+
+- **Primary Key:** id 
+
 
 ### Data Type(s):
 
