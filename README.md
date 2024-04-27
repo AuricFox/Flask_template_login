@@ -1,4 +1,4 @@
-# Flask Template
+# Flask Template with Login
 
 This is a Flask template used for starting web projects and supports user registration and login. It provides basic navigation for the main pages, sub pages, and a side bar for related topics. The database is maintained using SQLAlchemy which currently supports a default table called Models and a User table.
 
