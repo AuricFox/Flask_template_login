@@ -14,7 +14,11 @@
     </div>
     <div class="form-topic">
         <label for="password" class="title">Password</label>
-        <textarea id="password" name="password" rows="4">{{ user.password | escape }}</textarea>
+        <input id="password" name="password" rows="4" value="{{ user.password | escape }}">
+    </div>
+    <div class="form-topic">
+        <label for="is-admin" class="title">Admin Privileges</label>
+        <input id="is-admin" name="is-admin" rows="4" value="{{ user.is_admin | escape }}">
     </div>
     <button class="link center" type="submit">Update User</button>
 </form>

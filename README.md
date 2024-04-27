@@ -37,13 +37,13 @@ To get started, follow these steps:
     ```
     pip install Flask Flask-Login Flask-Bcrypt FLask-Migrate Flask-SQLAlchemy Flask-Testing python-dotenv
     ```
-    * Flask: a python framework for building web applications.
-    * Flask-Login: provides user session management for Flask such as logging in or out.
-    * Flask-Bcrypt: a Flask extension for hashing passwords.
-    * Flask-Migration: an extension that handles SQLAlchemy database migrations.
-    * Flask-SQLAlchemy: a Flask extension that simplifies database queries and management.
-    * Flask-Testing: an extension that provides unit testing utilities for Flask.
-    * Python-Dotenv: allows use of environment variables in python projects.
+    * **Flask:** a python framework for building web applications.
+    * **Flask-Login:** provides user session management for Flask such as logging in or out.
+    * **Flask-Bcrypt:** a Flask extension for hashing passwords.
+    * **Flask-Migration:** an extension that handles SQLAlchemy database migrations.
+    * **Flask-SQLAlchemy:** a Flask extension that simplifies database queries and management.
+    * **Flask-Testing:** an extension that provides unit testing utilities for Flask.
+    * **Python-Dotenv:** allows use of environment variables in python projects.
 
 5. **Run Server:**
     ```
