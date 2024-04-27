@@ -17,7 +17,7 @@ def index():
     Output(s):
         A rendered HTML login/sign-up page
     '''
-    return render_template('login/login.html', nav_id="home-page", sign_up=False)
+    return render_template('auth/login.html', nav_id="home-page", sign_up=False)
 
 # ====================================================================
 # Login/Log Out Routes
@@ -33,7 +33,7 @@ def login():
         A redirect to a HTML page
     '''
     if request.method == 'GET':
-        return render_template('login/login.html', nav_id="home-page", sign_up=False)
+        return render_template('auth/login.html', nav_id="home-page", sign_up=False)
 
     name = request.form.get('name', type=str)
     password = request.form.get('password', type=str)
@@ -79,7 +79,7 @@ def sign_up():
         A rendered HTML sign up page
     '''
     if request.method == 'GET':
-        return render_template('login/login.html', nav_id="home-page", sign_up=True)
+        return render_template('auth/login.html', nav_id="home-page", sign_up=True)
     
     # Get form fields
     name = request.form.get('name', type=str)
@@ -107,7 +107,7 @@ def sign_up():
 @bp.route('/manage_users')
 def manage_users():
     users = User.query.all()
-    return render_template('./manage_users/manage_users.html', nav_id="manage-page", users=users)
+    return render_template('./auth/manage_users.html', nav_id="manage-user-page", users=users)
 
 # ==============================================================================================================
 @bp.route('/view_user/<int:id>')
@@ -123,7 +123,7 @@ def view_user(id):
     '''
     # Get the data upon the first instance of the key
     user = User.query.filter_by(id=id).first()
-    return render_template('./manage_users/view_user.html', nav_id="manage-page", user=user)
+    return render_template('./auth/view_user.html', nav_id="manage-user-page", user=user)
 
 # ==============================================================================================================
 @bp.route('/edit_user/<int:id>', methods=['GET', 'POST'])
@@ -139,7 +139,7 @@ def edit_user(id):
     '''
     # Get the data upon the first instance of the key
     user = User.query.filter_by(id=id).first()
-    return render_template('./manage_users/edit_user.html', nav_id="manage-page", user=user)
+    return render_template('./auth/edit_user.html', nav_id="manage-user-page", user=user)
 
 # ==============================================================================================================
 
