@@ -5,6 +5,7 @@ from app.auth import bp
 from app.models.models import User
 from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
+from app.app_utils import get_user_record, update_user_record, add_user_record, delete_user_record
 
 # ====================================================================
 @bp.route("/", methods=['GET', 'POST'])
@@ -106,7 +107,7 @@ def sign_up():
 # ====================================================================
 @bp.route('/manage_users')
 def manage_users():
-    users = User.query.all()
+    users = get_user_record()
     return render_template('./auth/manage_users.html', nav_id="manage-user-page", users=users)
 
 # ==============================================================================================================
@@ -122,7 +123,7 @@ def view_user(id):
         None, redirects to the view page
     '''
     # Get the data upon the first instance of the key
-    user = User.query.filter_by(id=id).first()
+    user = get_user_record(user_id=id)
     return render_template('./auth/view_user.html', nav_id="manage-user-page", user=user)
 
 # ==============================================================================================================
@@ -138,7 +139,7 @@ def edit_user(id):
         None, redirects to the edit page
     '''
     # Get the data upon the first instance of the key
-    user = User.query.filter_by(id=id).first()
+    user = get_user_record(user_id=id)
     return render_template('./auth/edit_user.html', nav_id="manage-user-page", user=user)
 
 # ==============================================================================================================
@@ -155,34 +156,21 @@ def update_info(id):
         None, redirects to the manage page
     '''
     try:
-        # Check if the record exists
-        user = User.query.get(id)
-
-        if user is None:
-            raise ValueError("Record not found.")
-
         # Get all the form fields
-        updated_name = request.form.get('name', type=str)
-        updated_email = request.form.get('email')
-        updated_password = request.form.get('password', type=str)
+        name = request.form.get('name', type=str)
+        email = request.form.get('email', type=str)
+        password = request.form.get('password', type=str)
 
-        if updated_name:
-            user.name = updated_name
-        if updated_email:
-            user.email = updated_email
-        if updated_password:
-            user.password = bcrypt.generate_password_hash(updated_password)
+        status = update_user_record(user_id=id, username=name, email=email, password=password)
 
-        # Commit new data to the database
-        db.session.commit()
-
-    except ValueError as e:
-        LOGGER.error(f'Error updating record: {e}')
-        flash("Error: Invalid input.", "error")
+        if status:
+            flash("Update Successful!", "success")
+        else:
+            raise Exception("Update failed")        
 
     except Exception as e:
         LOGGER.error(f'An error occurred when updating record: {e}')
-        flash("Error: Something went wrong.", "error")
+        flash("Failed to update record!", "error")
 
     return redirect(url_for('auth.manage_users'))
 
@@ -200,18 +188,14 @@ def delete(id):
     '''
     try:
         # Query database for question and delete it
-        user = User.query.filter_by(id=id).first()
+        status = delete_user_record(user_id=id)
 
-        if user:
-            # Delete the row data
-            db.session.delete(user)
-            db.session.commit()
-            LOGGER.info(f'Record deleted:\n{user}')
-            flash("Successfully deleted record!", "error")
+        if status:
+            flash("Successfully deleted record!", "success")
         else:
-            LOGGER.error(f'An error occurred when deleting record: {e}')
             flash("Failed to delete record", "error")
-    
+            raise Exception("Deletion failed")
+            
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
     

@@ -77,7 +77,7 @@ def verify_file(file:str):
         return False
 
 # =========================================================================================
-def view_user_record(user_id:int=None):
+def get_user_record(user_id:int=None):
     '''
     Fetches the user(s) info from the database
 
