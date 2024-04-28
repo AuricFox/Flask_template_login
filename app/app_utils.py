@@ -77,7 +77,7 @@ def verify_file(file:str):
         return False
 
 # =========================================================================================
-def view_user(user_id:int=None):
+def view_user_record(user_id:int=None):
     '''
     Fetches the user(s) info from the database
 
@@ -100,7 +100,7 @@ def view_user(user_id:int=None):
         return None
 
 # =========================================================================================
-def add_user(username:str, email:str, password:str, is_admin:bool=False) -> bool:
+def add_user_record(username:str, email:str, password:str, is_admin:bool=False) -> bool:
     '''
     Adds the user info to the database
 
@@ -135,7 +135,7 @@ def add_user(username:str, email:str, password:str, is_admin:bool=False) -> bool
         return False
 
 # =========================================================================================
-def update_user(user_id:int, username:str=None, email:str=None, password:str=None, is_admin:bool=None) -> bool:
+def update_user_record(user_id:int, username:str=None, email:str=None, password:str=None, is_admin:bool=None) -> bool:
     '''
     Adds the user info to the database
 
@@ -176,7 +176,7 @@ def update_user(user_id:int, username:str=None, email:str=None, password:str=Non
         return False
 
 # =========================================================================================
-def delete_user(user_id:int):
+def delete_user_record(user_id:int):
     '''
     Deletes user record from the database
     
