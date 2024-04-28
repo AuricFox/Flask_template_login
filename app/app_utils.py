@@ -46,7 +46,6 @@ def verify_file(file:str):
     Output(s):
         True if the file is valid, else False
     '''
-
     try:
         # Replace special characters with underscores
         sanitized_name = re.sub(r'[\\/*?:"<>| ]', '_', file)
@@ -86,14 +85,19 @@ def view_user(user_id:int=None):
         user_id (int, default=None): the primary key of the user being queried
 
     Output(s):
-        A dictionary list if user_id is None, else returns a dictionary containing the user's info
+        A list of User objects if user_id is None (all users), else returns a User object containing the user's info
     '''
-    # Get all user info
-    if not user_id:
-        return User.query.all()
+    try:
+        # Get all user info
+        if not user_id:
+            return User.query.all()
+
+        # Return the queried user's info
+        return User.query.filter_by(id=user_id).first()
     
-    # Return the queried user's info
-    return User.query.filter_by(id=user_id).first()
+    except Exception as e:
+        LOGGER.error(f"An error occurred when retrieving user(s) info: {e}")
+        return None
 
 # =========================================================================================
 def add_user(username:str, email:str, password:str, is_admin:bool=False) -> bool:
@@ -101,17 +105,46 @@ def add_user(username:str, email:str, password:str, is_admin:bool=False) -> bool
     Adds the user info to the database
 
     Parameter(s):
+        username (str): User's name
+        email (str): User's email address
+        password (str): User's password
+        is_admin (bool, default=False): Whether the user is an admin
 
     Output(s):
         True if the user data was successfully added, else False
     '''
+    try:
+        user = User.query.filter_by(email=email).first()
+        # Redirect to the sign up page if the email is already taken
+        if user:
+            LOGGER.warning(f"Email '{email}' is already taken.")
+            return False
+
+        # Create new user
+        new_user = User(name=username, email=email, password=password, is_admin=is_admin)
+
+        # Add new user to the database
+        db.session.add(new_user)
+        db.session.commit()
+
+        LOGGER.info(f"User '{username}' added successfully.")
+        return True
+
+    except Exception as e:
+        LOGGER.error(f"An error occurred when adding user info: {e}")
+        return False
 
 # =========================================================================================
-def update_user(user_id:int, name:str=None, email:str=None, password:str=None, is_admin:bool=None) -> bool:
+def update_user(user_id:int, username:str=None, email:str=None, password:str=None, is_admin:bool=None) -> bool:
     '''
     Adds the user info to the database
 
     Parameter(s):
+        user_id (int): User's primary key
+        username (str, default=None): User's new name
+        email (str, default=None): User's new email address
+        password (str, default=None): User's new password
+        is_admin (bool, default=None): Whether the user should be an admin
 
     Output(s):
         True if the user data was successfully added, else False
@@ -119,27 +152,60 @@ def update_user(user_id:int, name:str=None, email:str=None, password:str=None, i
     try:
         # Check if the record exists
         user = User.query.get(user_id)
-        if user is None: 
+        if user is None:
+            LOGGER.warning(f"User ID '{user_id}' not found.")
             return False
 
-        if name:
-            user.name = name
+        if username:
+            user.name = username
         if email:
             user.email = email
         if password:
             user.password = bcrypt.generate_password_hash(password)
-        if is_admin:
+        if is_admin is not None:
             user.is_admin = is_admin
 
         # Commit new data to the database
         db.session.commit()
 
+        LOGGER.info(f"User '{user_id}' successfully updated.")
+        return True
+
     except Exception as e:
         LOGGER.error(f"An error occured when updating the user's info: {e}")
         return False
+
+# =========================================================================================
+def delete_user(user_id:int):
+    '''
+    Deletes user record from the database
     
-    return True
- 
+    Parameter(s):
+        user_id (int): the primary key of the user
+
+    Output(s):
+        True if the user record is successfully deleted, else False
+    '''
+    try:
+        # Query database for question and delete it
+        user = User.query.filter_by(id=user_id).first()
+
+        if user:
+            # Delete the row data
+            db.session.delete(user)
+            db.session.commit()
+
+            LOGGER.info(f"User ID '{user_id}' successfully deleted.")
+            return True
+
+        else:
+            LOGGER.error(f"User ID '{user_id}' not found.")
+            return False
+    
+    except Exception as e:
+        LOGGER.error(f'An Error occured when deleting the record: {e}')
+        return False
+    
 # =========================================================================================
 def username() -> str:
     '''
