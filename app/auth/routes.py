@@ -5,7 +5,6 @@ from app.auth import bp
 from app.models.models import User
 from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
-from app.app_utils import get_user_record
 
 # ==============================================================================================================
 @bp.route("/", methods=['GET', 'POST'])
@@ -107,14 +106,3 @@ def sign_up():
 
     login_user(user=new_user, remember=remember)
     return redirect(url_for('main.index'))
-
-# ==============================================================================================================
-# Managing User Accounts
-# ==============================================================================================================
-@bp.route('/manage_users')
-def manage_users():
-    '''
-    NOTE: Remove this function or place restrictions.
-    '''
-    users = get_user_record()
-    return render_template('./auth/manage_users.html', nav_id="manage-user-page", users=users)

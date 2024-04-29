@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Profile{% endblock %}
+{% block title %}Edit User{% endblock %}
 
 {% block content %}
-<form class="record-form shadow" action="{{ url_for('profile.update_profile') }}" method="post" enctype="multipart/form-data">
+<form class="record-form shadow" action="{{ url_for('admin.update_user') }}" method="post" enctype="multipart/form-data">
     <div class="form-topic">
         <label for="name" class="title">Username</label>
         <input id="name" name="name" rows="4" value="{{ user.name | escape }}">

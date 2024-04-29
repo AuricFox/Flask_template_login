@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}View Profile{% endblock %}
+{% block title %}View User{% endblock %}
 
 {% block content %}
 
@@ -30,7 +30,7 @@
         <div class="description center-txt">{{ user.is_admin | escape }}</div>
     </div>
 
-    <a class="link center-txt" href="{{ url_for('profile.edit_profile') | escape }}">
+    <a class="link center-txt" href="{{ url_for('admin.edit_user') | escape }}">
         Edit Profile
     </a>
 </div>
