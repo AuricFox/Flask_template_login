@@ -7,7 +7,7 @@ from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
 from app.app_utils import get_user_record, update_user_record, add_user_record, delete_user_record
 
-# ====================================================================
+# ==============================================================================================================
 @bp.route("/", methods=['GET', 'POST'])
 def index():
     '''
@@ -20,9 +20,9 @@ def index():
     '''
     return render_template('auth/login.html', nav_id="home-page", sign_up=False)
 
-# ====================================================================
+# ==============================================================================================================
 # Login/Log Out Routes
-# ====================================================================  
+# ==============================================================================================================  
 @bp.route("/login", methods=['GET','POST'])
 def login():
     '''
@@ -50,7 +50,7 @@ def login():
     login_user(user=user, remember=remember)
     return redirect(url_for('main.index'))
 
-# ====================================================================
+# ==============================================================================================================
 @bp.route("/log_out")
 @login_required
 def log_out():
@@ -66,13 +66,13 @@ def log_out():
     logout_user()
     return redirect(url_for('main.index'))
 
-# ====================================================================
+# ==============================================================================================================
 # Sign Up Route
-# ====================================================================
+# ==============================================================================================================
 @bp.route("/sign_up", methods=['GET', 'POST'])
 def sign_up():
     '''
-    Configures sign up page
+    Configures sign up page and adds user account
 
     Parameter(s): None
 
@@ -87,11 +87,15 @@ def sign_up():
     email = request.form.get('email', type=str)
     password = request.form.get('password', type=str)
 
+    if not (name and email and password):
+        flash('Please Enter Required Fields!')
+        return redirect(request.referrer or url_for('login.index'))
+
     user = User.query.filter_by(email=email).first()
     # Redirect to the sign up page if the email is already taken
     if user:
         flash('Email address already exists!')
-        return redirect(url_for('login.index'))
+        return redirect(request.referrer or url_for('login.index'))
     
     # Create new user
     new_user = User(name=name, email=email, password=password)
@@ -102,11 +106,14 @@ def sign_up():
 
     return redirect(url_for('main.index'))
 
-# ====================================================================
+# ==============================================================================================================
 # Managing User Accounts
-# ====================================================================
+# ==============================================================================================================
 @bp.route('/manage_users')
 def manage_users():
+    '''
+    NOTE: Remove this function or place restrictions.
+    '''
     users = get_user_record()
     return render_template('./auth/manage_users.html', nav_id="manage-user-page", users=users)
 
@@ -120,8 +127,13 @@ def view_user(id):
         key (int): the primary key of the question being deleted from the database
 
     Output(s):
-        None, redirects to the view page
+        Redirects to the home page if id is None, else redirects to the user's profile page
     '''
+    # Check if there is a user id
+    if not id:
+        # Redirect to the previous page or home page if id is None
+        return redirect(request.referrer or url_for('main.index'))
+    
     # Get the data upon the first instance of the key
     user = get_user_record(user_id=id)
     return render_template('./auth/view_user.html', nav_id="manage-user-page", user=user)
@@ -136,14 +148,18 @@ def edit_user(id):
         key (int): the primary key of the question being deleted from the database
 
     Output(s):
-        None, redirects to the edit page
+        Redirects to the edit page if id is not None, else redirects to referrer or home page
     '''
+    # Check if there is a user id
+    if not id:
+        # Redirect to the previous page or home page if id is None
+        return redirect(request.referrer or url_for('main.index'))
+
     # Get the data upon the first instance of the key
     user = get_user_record(user_id=id)
     return render_template('./auth/edit_user.html', nav_id="manage-user-page", user=user)
 
 # ==============================================================================================================
-
 @bp.route('/update_info/<int:id>', methods=['POST'])
 def update_info(id):
     '''
