@@ -205,7 +205,19 @@ def delete_user_record(user_id:int):
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {e}')
         return False
+
+# =========================================================================================
+def curr_user():
+    '''
+    Gets the info of the current user that's logged in
     
+    Parameter(s): None
+    
+    Output(s):
+        A User object if logged in, else None
+    '''
+    return current_user if current_user.is_authenticated else None
+   
 # =========================================================================================
 def username() -> str:
     '''
@@ -217,15 +229,3 @@ def username() -> str:
         The name of the user if logged in, else None
     '''
     return current_user.name if current_user.is_authenticated else None
-
-# =========================================================================================
-def is_admin() -> bool:
-    '''
-    Get the admin status of the logged in user
-    
-    Parameter(s): None
-    
-    Output(s):
-        True is the logged in user is an admin, alse False
-    '''
-    return current_user.is_admin if current_user.is_authenticated else False

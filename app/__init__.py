@@ -45,10 +45,12 @@ def init_app():
         from app.main import bp as main_bp
         from app.auth import bp as auth_bp
         from app.manage import bp as manage_bp
+        from app.profile import bp as profile_bp
 
         app.register_blueprint(main_bp)
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(manage_bp, url_prefix='/manage')
+        app.register_blueprint(profile_bp, url_prefix='/profile')
         app.register_error_handler(404, page_not_found)
 
     return app

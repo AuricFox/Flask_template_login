@@ -5,7 +5,7 @@ from app.auth import bp
 from app.models.models import User
 from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
-from app.app_utils import get_user_record, update_user_record, add_user_record, delete_user_record
+from app.app_utils import get_user_record
 
 # ==============================================================================================================
 @bp.route("/", methods=['GET', 'POST'])
@@ -86,6 +86,7 @@ def sign_up():
     name = request.form.get('name', type=str)
     email = request.form.get('email', type=str)
     password = request.form.get('password', type=str)
+    remember = True if request.form.get('remember') else False
 
     if not (name and email and password):
         flash('Please Enter Required Fields!')
@@ -104,6 +105,7 @@ def sign_up():
     db.session.add(new_user)
     db.session.commit()
 
+    login_user(user=new_user, remember=remember)
     return redirect(url_for('main.index'))
 
 # ==============================================================================================================
@@ -116,103 +118,3 @@ def manage_users():
     '''
     users = get_user_record()
     return render_template('./auth/manage_users.html', nav_id="manage-user-page", users=users)
-
-# ==============================================================================================================
-@bp.route('/view_user/<int:id>')
-def view_user(id):
-    '''
-    Retrieves the queried data from the database for viewing
-
-    Parameter(s):
-        key (int): the primary key of the question being deleted from the database
-
-    Output(s):
-        Redirects to the home page if id is None, else redirects to the user's profile page
-    '''
-    # Check if there is a user id
-    if not id:
-        # Redirect to the previous page or home page if id is None
-        return redirect(request.referrer or url_for('main.index'))
-    
-    # Get the data upon the first instance of the key
-    user = get_user_record(user_id=id)
-    return render_template('./auth/view_user.html', nav_id="manage-user-page", user=user)
-
-# ==============================================================================================================
-@bp.route('/edit_user/<int:id>', methods=['GET', 'POST'])
-def edit_user(id):
-    '''
-    Retrieves the queried data from the database for editing
-
-    Parameter(s):
-        key (int): the primary key of the question being deleted from the database
-
-    Output(s):
-        Redirects to the edit page if id is not None, else redirects to referrer or home page
-    '''
-    # Check if there is a user id
-    if not id:
-        # Redirect to the previous page or home page if id is None
-        return redirect(request.referrer or url_for('main.index'))
-
-    # Get the data upon the first instance of the key
-    user = get_user_record(user_id=id)
-    return render_template('./auth/edit_user.html', nav_id="manage-user-page", user=user)
-
-# ==============================================================================================================
-@bp.route('/update_info/<int:id>', methods=['POST'])
-def update_info(id):
-    '''
-    Processes the new data and updates the database
-    
-    Parameter(s): 
-        id (int): the primary key of the record being updated
-
-    Output(s):
-        None, redirects to the manage page
-    '''
-    try:
-        # Get all the form fields
-        name = request.form.get('name', type=str)
-        email = request.form.get('email', type=str)
-        password = request.form.get('password', type=str)
-
-        status = update_user_record(user_id=id, username=name, email=email, password=password)
-
-        if status:
-            flash("Update Successful!", "success")
-        else:
-            raise Exception("Update failed")        
-
-    except Exception as e:
-        LOGGER.error(f'An error occurred when updating record: {e}')
-        flash("Failed to update record!", "error")
-
-    return redirect(url_for('auth.manage_users'))
-
-# ==============================================================================================================
-@bp.route("/delete/<int:id>")
-def delete(id):
-    '''
-    Deletes the queried data from the database and redirects to manage page
-
-    Parameter(s):
-        key (int): the primary key of the question being deleted from the database
-
-    Output(s):
-        None, redirects to the manage page
-    '''
-    try:
-        # Query database for question and delete it
-        status = delete_user_record(user_id=id)
-
-        if status:
-            flash("Successfully deleted record!", "success")
-        else:
-            flash("Failed to delete record", "error")
-            raise Exception("Deletion failed")
-            
-    except Exception as e:
-        LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
-    
-    return redirect(url_for('auth.manage_users'))

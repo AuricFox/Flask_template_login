@@ -3,7 +3,7 @@
 {% block title %}Edit{% endblock %}
 
 {% block content %}
-<form class="record-form shadow" action="{{ url_for('auth.update_info', id=user.id) }}" method="post" enctype="multipart/form-data">
+<form class="record-form shadow" action="{{ url_for('profile.update_profile') }}" method="post" enctype="multipart/form-data">
     <div class="form-topic">
         <label for="name" class="title">Username</label>
         <input id="name" name="name" rows="4" value="{{ user.name | escape }}">
@@ -13,13 +13,13 @@
         <input id="email" name="email" rows="4" value="{{ user.email | escape }}">
     </div>
     <div class="form-topic">
-        <label for="password" class="title">Password</label>
-        <input id="password" name="password" rows="4" value="{{ user.password | escape }}">
+        <label for="password" class="title">Password </label>
+        <input id="password" name="password" rows="4">
     </div>
     <div class="form-topic">
         <label for="is-admin" class="title">Admin Privileges</label>
         <input id="is-admin" name="is-admin" rows="4" value="{{ user.is_admin | escape }}">
     </div>
-    <button class="link center" type="submit">Update User</button>
+    <button class="link center" type="submit">Update Profile</button>
 </form>
 {% endblock %}

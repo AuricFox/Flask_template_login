@@ -18,7 +18,7 @@
         <div class="description center-txt">{{ user.email | escape }}</div>
     </div>
     <div>
-        <div class="title center-txt">Password</div>
+        <div class="title center-txt">Password (Encrypted)</div>
         <div class="description center-txt">{{ user.password | escape }}</div>
     </div>
     <div>
@@ -30,8 +30,8 @@
         <div class="description center-txt">{{ user.is_admin | escape }}</div>
     </div>
 
-    <a class="link center-txt" href="{{ url_for('auth.edit_user', id=user.id) | escape }}">
-        Edit User
+    <a class="link center-txt" href="{{ url_for('profile.edit_profile') | escape }}">
+        Edit Profile
     </a>
 </div>
 
