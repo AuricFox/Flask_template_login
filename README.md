@@ -91,6 +91,9 @@ Flask_template_login
 |   |   └───routes.py
 │   ├───models
 │   │   └───models.py
+│   ├───profile
+│   │   ├───__init__.py
+|   |   └───routes.py
 │   ├───static
 │   │   ├───css
 |   |   |   ├───base.css
@@ -111,6 +114,9 @@ Flask_template_login
 |   |    |   ├───edit.html
 |   |    |   ├───manage.html
 |   |    |   └───view.html
+│   |    ├───profile
+|   |    |   ├───edit_profile.html
+|   |    |   ├───view_profile.html
 |   |    ├───404.html
 |   |    ├───base.html
 |   |    └───index.html
