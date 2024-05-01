@@ -27,10 +27,10 @@
                 <td class="info-cell">{{ user.password | escape }}</td>
                 <td class="action-cells">
                     <div class="action-links">
-                        <a class="action-cell view-cell" href="{{ url_for('auth.view_user', id=user.id) | escape }}">
+                        <a class="action-cell view-cell" href="{{ url_for('admin.view_user', id=user.id) | escape }}">
                             <img class="icon-btn" src="{{ url_for('static', filename='images/icons/view.png') }}" alt="view">
                         </a>
-                        <a class="action-cell edit-cell" href="{{ url_for('auth.edit_user', id=user.id) | escape }}">
+                        <a class="action-cell edit-cell" href="{{ url_for('admin.edit_user', id=user.id) | escape }}">
                             <img class="icon-btn" src="{{ url_for('static', filename='images/icons/edit.png') }}" alt="edit">
                         </a>
                         <a class="action-cell delete-cell" href="#" data-record="{{ user.id | escape }}">

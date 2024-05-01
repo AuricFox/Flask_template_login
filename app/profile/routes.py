@@ -82,7 +82,7 @@ def update_profile():
         LOGGER.error(f'An error occurred when updating record: {e}')
         flash("Failed to update record!", "error")
 
-    return redirect(url_for('auth.manage_users'))
+    return redirect(url_for('profile.index'))
 
 # ==============================================================================================================
 @bp.route("/delete_profile")
@@ -114,4 +114,4 @@ def delete_profile():
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
     
-    return redirect(url_for('auth.manage_users'))
+    return redirect(url_for('main.index'))

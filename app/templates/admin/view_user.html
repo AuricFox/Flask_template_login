@@ -30,7 +30,7 @@
         <div class="description center-txt">{{ user.is_admin | escape }}</div>
     </div>
 
-    <a class="link center-txt" href="{{ url_for('admin.edit_user') | escape }}">
+    <a class="link center-txt" href="{{ url_for('admin.edit_user', id=user.id) | escape }}">
         Edit Profile
     </a>
 </div>
