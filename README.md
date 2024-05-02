@@ -71,6 +71,11 @@ To get started, follow these steps:
     set DATABASE_URI="postgresql://username:password@host:port/database_name"
     ```
 
+## Default Administrator
+
+* **Username:** Default Admin
+* **Password:** 12345
+
 ## File Structure
 
 NOTE: All non-relavent files like `__pycache__` and env files have been removed from the file tree. Image files 
@@ -104,11 +109,12 @@ Flask_template_login
 │   │   └───js
 |   |       └───base.js
 │   ├───templates
-|   |    ├───auth
+|   |    ├───admin
 |   |    |   ├───edit_user.html
-|   |    |   ├───login.html
 |   |    |   ├───manage_users.html
 |   |    |   └───view_user.html
+|   |    ├───auth
+|   |    |   └───login.html
 │   |    ├───manage
 |   |    |   ├───add.html
 |   |    |   ├───edit.html
@@ -116,7 +122,7 @@ Flask_template_login
 |   |    |   └───view.html
 │   |    ├───profile
 |   |    |   ├───edit_profile.html
-|   |    |   ├───view_profile.html
+|   |    |   └───view_profile.html
 |   |    ├───404.html
 |   |    ├───base.html
 |   |    └───index.html
