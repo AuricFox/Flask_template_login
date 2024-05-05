@@ -1,10 +1,6 @@
 from flask_login import current_user
 import logging, os, re, mimetypes
 
-from flask_wtf import FlaskForm
-from wtforms import EmailField, PasswordField, StringField, DateField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
-
 from app.models.models import User
 from app.extensions import db, bcrypt
 
@@ -18,44 +14,6 @@ logging.basicConfig(
 )
 
 LOGGER = logging.getLogger(__name__)
-
-# =========================================================================================
-# Form Classes
-# =========================================================================================
-class RegisterForm(FlaskForm):
-    name = StringField(
-        "Username", validators=[DataRequired(), Length(min=6, max=1000)]
-    )
-    email = EmailField(
-        "Email", validators=[DataRequired(), Email(message=None), Length(min=6, max=100)]
-    )
-    password = PasswordField(
-        "Password", validators=[DataRequired(), Length(min=6, max=100)]
-    )
-    confirm = PasswordField(
-        "Repeat password",
-        validators=[DataRequired(), EqualTo("password", message="Passwords must match."),
-        ]
-    )
-
-class LoginForm(FlaskForm):
-    email = EmailField(
-        "Email", validators=[DataRequired(), Email()]
-    )
-    password = PasswordField(
-        "Password", validators=[DataRequired()]
-    )
-
-class DefaultForm(FlaskForm):
-    name = StringField(
-        "Name", validators=[DataRequired(), Length(min=6, max=50)]
-    )
-    date = DateField(
-        "Date"
-    )
-    message = StringField(
-        "Message"
-    )
 
 # =========================================================================================
 # Error Handling
