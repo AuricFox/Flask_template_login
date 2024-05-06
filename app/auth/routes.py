@@ -1,10 +1,13 @@
 from flask import request, render_template, redirect, url_for, flash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
 
 from app.models.models import User
 from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
+
+from app.forms.register_form import RegisterForm
+from app.forms.login_form import LoginForm
 
 # ==============================================================================================================
 @bp.route("/", methods=['GET', 'POST'])
@@ -15,8 +18,11 @@ def index():
     Parameter(s): None
 
     Output(s):
-        A rendered HTML login/sign-up page
+        A HTML login/sign-up page if the user is not logged in, else redirects to the home page or calling page
     '''
+    if current_user.is_authenticated:
+        return redirect(request.referrer or url_for('main.index'))
+    
     return render_template('auth/login.html', nav_id="home-page", sign_up=False)
 
 # ==============================================================================================================
@@ -32,17 +38,24 @@ def login():
     Output(s):
         A redirect to a HTML page
     '''
+    # Redirect to the calling page or home page if the user is logged in
+    if current_user.is_authenticated:
+        return redirect(request.referrer or url_for('main.index'))
+    # Render the login page
     if request.method == 'GET':
         return render_template('auth/login.html', nav_id="home-page", sign_up=False)
-
-    name = request.form.get('name', type=str)
-    password = request.form.get('password', type=str)
+    
+    # Get form data and varify contents
+    form = LoginForm(request.form)
+    if not form.validate_on_submit():
+        return render_template('auth/login.html', nav_id="home-page", sign_up=False, form=form)
+    
     remember = True if request.form.get('remember') else False
 
-    user = User.query.filter_by(name=name).first()
+    user = User.query.filter_by(name=form.username.data).first()
 
-    # Check if the user exists
-    if not user or not bcrypt.check_password_hash(user.password, password):
+    # Check if the user exists and if the hashed passwords match
+    if not user or not bcrypt.check_password_hash(user.password, form.password.data):
         flash('Incorrect username or password!')
         return redirect(url_for('auth.index'))
     
@@ -82,23 +95,14 @@ def sign_up():
         return render_template('auth/login.html', nav_id="home-page", sign_up=True)
     
     # Get form fields
-    name = request.form.get('name', type=str)
-    email = request.form.get('email', type=str)
-    password = request.form.get('password', type=str)
+    form = RegisterForm(request.form)
     remember = True if request.form.get('remember') else False
 
-    if not (name and email and password):
-        flash('Please Enter Required Fields!')
-        return redirect(request.referrer or url_for('login.index'))
-
-    user = User.query.filter_by(email=email).first()
-    # Redirect to the sign up page if the email is already taken
-    if user:
-        flash('Email address already exists!')
-        return redirect(request.referrer or url_for('login.index'))
+    if not form.validate_on_submit():
+        return render_template('auth/login.html', nav_id="home-page", sign_up=True, form=form)
     
     # Create new user
-    new_user = User(name=name, email=email, password=password)
+    new_user = User(name=form.username.data, email=form.email.data, password=form.password.data)
 
     # Add new user to the database
     db.session.add(new_user)

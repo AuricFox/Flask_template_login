@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 from app.models.models import User
 
-# =========================================================================================
 class RegisterForm(FlaskForm):
     '''
     Used for validating User registration
@@ -38,20 +37,10 @@ class RegisterForm(FlaskForm):
             self.email.errors.append("Email already Exists")
             return False
         # Check if the two passwords are the same (password and confirmation password)
+        '''
         if self.password.data != self.confirm.data:
             self.password.errors.append("Passwords must match")
             return False
+        '''
         
         return True
-
-# =========================================================================================
-class LoginForm(FlaskForm):
-    '''
-    Used for validating User login
-    '''
-    username = StringField(
-        "Username", validators=[DataRequired(), Length(min=6, max=100)]
-    )
-    password = PasswordField(
-        "Password", validators=[DataRequired(), Length(min=6, max=100)]
-    )
