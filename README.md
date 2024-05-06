@@ -85,9 +85,16 @@ have also been removed to reduce clutter.
 .
 Flask_template_login
 ├───app
+│   ├───admin
+│   │   ├───__init__.py
+|   |   └───routes.py
 │   ├───auth
 │   │   ├───__init__.py
 |   |   └───routes.py
+│   ├───forms
+│   │   ├───default_form.py
+│   │   ├───login_form.py
+|   |   └───register_form.py
 │   ├───main
 │   │   ├───__init__.py
 |   |   └───routes.py
@@ -144,6 +151,7 @@ Flask_template_login
 
 ## Directories
 
+- **forms**: Contains the FlaskWTF form classes used to verify data submittions.
 - **models**: Maintians separation of SQLAlchemy models for large applications. As projects grow, more database tables may be added and more models will need to be wriiten. Splitting the models into individual files will help with management and maintenance.
 - **static**: Contains all the css, js, and image files which are stored in their corresponding directory.
 - **templates**: Maintains the organization of the HTML files that provide structure for the web pages.
