@@ -12,30 +12,45 @@ class RegisterForm(FlaskForm):
         "Username", validators=[DataRequired(), Length(min=6, max=100)]
     )
     email = EmailField(
-        "Email", validators=[DataRequired(), Email(message=None), Length(min=6, max=100)]
+        "Email", validators=[DataRequired(), Length(min=6, max=100)]
     )
     password = PasswordField(
         "Password", validators=[DataRequired(), Length(min=6, max=100)]
     )
+    '''
     confirm = PasswordField(
         "Repeat password",
         validators=[DataRequired(), EqualTo("password", message="Passwords must match."),
         ]
     )
+    '''
+    # ==============================================================================================================
+    def email_validator(self, field):
+        '''
+        Validate email to see if it is already registered
 
-    def validate(self):
+        Parameter(s):
+            field: email field from the submitted form
+
+        Output(s):
+            True if the email is not taken, else false
+        '''
+        return False if User.query.filter_by(email=field.data).first() else True
+
+    # ==============================================================================================================
+    def validate(self, extra_validators=None):
         '''
         Validates the submitted form data
         '''
-        initial_validation = super(RegisterForm, self).validate()
+        initial_validation = super(RegisterForm, self).validate(extra_validators)
         if not initial_validation:
             return False
-        
-        user = User.query.filter_by(email=self.email.data).first()
+    
         # Check if the email exists
-        if user:
+        if not self.email_validator(self.email):
             self.email.errors.append("Email already Exists")
             return False
+        
         # Check if the two passwords are the same (password and confirmation password)
         '''
         if self.password.data != self.confirm.data:

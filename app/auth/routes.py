@@ -41,25 +41,21 @@ def login():
     # Redirect to the calling page or home page if the user is logged in
     if current_user.is_authenticated:
         return redirect(request.referrer or url_for('main.index'))
-    # Render the login page
-    if request.method == 'GET':
-        return render_template('auth/login.html', nav_id="home-page", sign_up=False)
     
     # Get form data and varify contents
-    form = LoginForm(request.form)
-    if not form.validate_on_submit():
-        return render_template('auth/login.html', nav_id="home-page", sign_up=False, form=form)
-    
-    remember = True if request.form.get('remember') else False
+    login_form = LoginForm(request.form)
+    if not login_form.validate_on_submit():
+        register_form = RegisterForm(request.form)
+        return render_template('auth/login.html', nav_id="home-page", sign_up=False, login_form=login_form, register_form=register_form)
 
-    user = User.query.filter_by(name=form.username.data).first()
+    user = User.query.filter_by(name=login_form.username.data).first()
 
     # Check if the user exists and if the hashed passwords match
-    if not user or not bcrypt.check_password_hash(user.password, form.password.data):
+    if not user or not bcrypt.check_password_hash(user.password, login_form.password.data):
         flash('Incorrect username or password!')
         return redirect(url_for('auth.index'))
     
-    login_user(user=user, remember=remember)
+    login_user(user=user)
     return redirect(url_for('main.index'))
 
 # ==============================================================================================================
@@ -91,22 +87,29 @@ def sign_up():
     Output(s):
         A rendered HTML sign up page
     '''
-    if request.method == 'GET':
-        return render_template('auth/login.html', nav_id="home-page", sign_up=True)
+    # Redirect to the calling page or home page if the user is logged in
+    if current_user.is_authenticated:
+        return redirect(request.referrer or url_for('main.index'))
     
     # Get form fields
-    form = RegisterForm(request.form)
-    remember = True if request.form.get('remember') else False
+    register_form = RegisterForm()
 
-    if not form.validate_on_submit():
-        return render_template('auth/login.html', nav_id="home-page", sign_up=True, form=form)
+    # Process data if valid
+    if register_form.validate_on_submit():
+        # Create new user
+        new_user = User(
+            name=register_form.username.data, 
+            email=register_form.email.data, 
+            password=register_form.password.data
+        )
+
+        # Add new user to the database
+        db.session.add(new_user)
+        db.session.commit()
+
+        login_user(user=new_user)
+        return redirect(url_for('main.index'))
     
-    # Create new user
-    new_user = User(name=form.username.data, email=form.email.data, password=form.password.data)
-
-    # Add new user to the database
-    db.session.add(new_user)
-    db.session.commit()
-
-    login_user(user=new_user, remember=remember)
-    return redirect(url_for('main.index'))
+    # Form is not submitted yet or validation failed, render sign-up page
+    login_form = LoginForm()
+    return render_template('auth/login.html', nav_id="home-page", sign_up=True, register_form=register_form, login_form=login_form)
