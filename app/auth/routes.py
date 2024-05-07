@@ -40,23 +40,24 @@ def login():
     '''
     # Redirect to the calling page or home page if the user is logged in
     if current_user.is_authenticated:
-        return redirect(request.referrer or url_for('main.index'))
+        return redirect(url_for('main.index'))
     
     # Get form data and varify contents
     login_form = LoginForm(request.form)
-    if not login_form.validate_on_submit():
-        register_form = RegisterForm(request.form)
-        return render_template('auth/login.html', nav_id="home-page", sign_up=False, login_form=login_form, register_form=register_form)
+    if login_form.validate_on_submit():
+        
+        user = User.query.filter_by(name=login_form.username.data).first()
 
-    user = User.query.filter_by(name=login_form.username.data).first()
+        # Check if the user exists and if the hashed passwords match
+        if not user or not bcrypt.check_password_hash(user.password, login_form.password.data):
+            flash('Invalid username or password!')
+            return redirect(url_for('auth.index'))
 
-    # Check if the user exists and if the hashed passwords match
-    if not user or not bcrypt.check_password_hash(user.password, login_form.password.data):
-        flash('Incorrect username or password!')
-        return redirect(url_for('auth.index'))
-    
-    login_user(user=user)
-    return redirect(url_for('main.index'))
+        login_user(user=user)
+        return redirect(url_for('main.index'))
+
+    register_form = RegisterForm(request.form)
+    return render_template('auth/login.html', nav_id="home-page", sign_up=False, login_form=login_form, register_form=register_form)
 
 # ==============================================================================================================
 @bp.route("/log_out")

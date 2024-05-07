@@ -15,3 +15,14 @@ class LoginForm(FlaskForm):
     password = PasswordField(
         "Password", validators=[DataRequired(), Length(min=6, max=100)]
     )
+
+    # ==============================================================================================================
+    def validate(self, extra_validators=None):
+        '''
+        Validates the submitted login form data
+        '''
+        initial_validation = super(LoginForm, self).validate(extra_validators)
+        if not initial_validation:
+            return False
+        
+        return True
