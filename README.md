@@ -74,7 +74,7 @@ To get started, follow these steps:
 ## Default Administrator
 
 * **Username:** Default Admin
-* **Password:** 12345
+* **Password:** 123456789
 
 ## File Structure
 

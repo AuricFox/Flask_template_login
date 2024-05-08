@@ -22,8 +22,8 @@ def index():
     '''
     if current_user.is_authenticated:
         return redirect(request.referrer or url_for('main.index'))
-    
-    return render_template('auth/login.html', nav_id="home-page", sign_up=False)
+
+    return redirect(url_for('auth.login'))
 
 # ==============================================================================================================
 # Login/Log Out Routes

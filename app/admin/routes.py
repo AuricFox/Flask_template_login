@@ -1,10 +1,12 @@
 from flask import request, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.admin import bp
 
+from app.admin import bp
 from app.models.models import User
-from app.extensions import db, bcrypt
-from app.app_utils import LOGGER, curr_user, get_user_record, update_user_record, delete_user_record
+
+from app.forms.user_form import UserForm
+from app.app_utils import LOGGER, curr_user, get_user_record
+from app.extensions import bcrypt, db
 
 # ==============================================================================================================
 # Managing User Accounts
@@ -24,7 +26,7 @@ def index():
     admin = curr_user()
     # Check if the current user has admin privileges
     if not admin.is_admin:
-        return redirect(request.referrer or url_for('main.index'))
+        return redirect(url_for('main.index'))
 
     users = get_user_record()
     return render_template('./admin/manage_users.html', nav_id="manage-user-page", users=users, username=admin.name)
@@ -45,7 +47,7 @@ def view_user(id):
     admin = curr_user()
     # Check if the current user has admin privileges
     if not admin.is_admin:
-        return redirect(request.referrer or url_for('main.index'))
+        return redirect(url_for('main.index'))
     
     user = get_user_record(user_id=id)
     
@@ -54,31 +56,7 @@ def view_user(id):
     return render_template('./admin/view_user.html', nav_id="home-page", user=user, username=admin.name)
 
 # ==============================================================================================================
-@bp.route('/edit_user/<int:id>', methods=['GET', 'POST'])
-@login_required
-def edit_user(id):
-    '''
-    Retrieves the queried data from the database for editing
-
-    Parameter(s):
-        User must be logged in
-
-    Output(s):
-        Redirects to the edit page if id is not None, else redirects to referrer or home page
-    '''
-    admin = curr_user()
-    # Check if the current user has admin privileges
-    if not admin.is_admin:
-        return redirect(request.referrer or url_for('main.index'))
-    
-    user = get_user_record(user_id=id)
-
-    # Get the data upon the first instance of the key
-    #user = get_user_record(user_id=id)
-    return render_template('./admin/edit_user.html', nav_id="home-page", user=user, username=admin.name)
-
-# ==============================================================================================================
-@bp.route('/update_user/<int:id>', methods=['POST'])
+@bp.route('/update_user/<int:id>', methods=['GET','POST'])
 @login_required
 def update_user(id):
     '''
@@ -92,26 +70,40 @@ def update_user(id):
     '''
     try:
         admin = curr_user()
+        # Check if the user has admin access
         if not admin.is_admin:
-            return redirect(request.referrer or url_for('main.index'))
-    
-        # Get all the form fields
-        name = request.form.get('name', type=str)
-        email = request.form.get('email', type=str)
-        password = request.form.get('password', type=str)
+            return redirect(url_for('main.index'))
+        
+        user = User.query.get(id)
+        # Check if the user record exists
+        if user is None:
+            raise Exception(f"User ID '{id}' not found.")
+        
+        form = UserForm(form=request.form)
+        if form.validate_on_submit():
 
-        status = update_user_record(user_id=id, username=name, email=email, password=password)
+            if form.username.data:
+                user.name = form.username.data
+            if form.email.data:
+                user.email = form.email.data
+            if form.password.data:
+                user.password = bcrypt.generate_password_hash(form.password.data)
+            if form.is_admin.data is not None:
+                user.is_admin = form.is_admin.data
 
-        if status:
-            flash("Update Successful!", "success")
-        else:
-            raise Exception("Update failed")        
+            # Commit new data to the database
+            db.session.commit()
+            
+            flash("Updated Successfully!")
+            return redirect(url_for('admin.index'))
 
     except Exception as e:
-        LOGGER.error(f'An error occurred when updating record: {e}')
+        # Roll back the session in case of an error
+        db.session.rollback()
+        LOGGER.error(f"An error occurred when updating user record: {e}")
         flash("Failed to update record!", "error")
 
-    return redirect(url_for('admin.index'))
+    return render_template('./admin/edit_user.html', nav_id="home-page", user=user, username=admin.name, form=form)
 
 # ==============================================================================================================
 @bp.route("/delete/<int:id>")
@@ -129,18 +121,22 @@ def delete(id):
     try:
         admin = curr_user()
         if not admin.is_admin:
-            return redirect(request.referrer or url_for('auth.index'))
+            return redirect(url_for('auth.index'))
         
         # Query database for question and delete it
-        status = delete_user_record(user_id=id)
+        user = User.query.filter_by(id=id).first()
 
-        if status:
-            flash("Successfully deleted record!", "success")
-        else:
-            flash("Failed to delete record", "error")
-            raise Exception("Deletion failed")
+        if user:
+            # Delete the row data
+            db.session.delete(user)
+            db.session.commit()
+
+            LOGGER.info(f"User ID '{id}' successfully deleted.")
+            flash("User record successfully deleted!")
             
     except Exception as e:
-        LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
+        # Roll back the session in case of an error
+        db.session.rollback()
+        LOGGER.error(f"An Error occured when deleting the record: {str(e)}")
     
     return redirect(url_for('admin.index'))
