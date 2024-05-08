@@ -4,17 +4,18 @@
 
 {% block content %}
 <form class="record-form shadow" action="{{ url_for('manage.update_info', id=data.id) }}" method="post" enctype="multipart/form-data">
+    {{ form.csrf_token }}
     <div class="form-topic">
-        <label for="name" class="title">Name</label>
-        <input class="search" id="name" name="name" rows="4" value="{{ data.name | escape }}">
+        {{ form.name.label(class="title") }}
+        {{ form.name(value=data.name | escape) }}
     </div>
     <div class="form-topic">
-        <label for="date" class="title">Date</label>
-        <input type="date" id="date" name="date" rows="4" value="{{ data.date | escape }}">
+        {{ form.date.label(class="title") }}
+        {{ form.date(value=data.date | escape) }}
     </div>
     <div class="form-topic">
-        <label for="message" class="title">Message</label>
-        <textarea id="message" name="message" rows="4">{{ data.message | escape }}</textarea>
+        {{ form.message.label(class="title") }}
+        {{ form.message(value=data.message | escape) }}
     </div>
     <button class="link center" type="submit">Update Info</button>
 </form>

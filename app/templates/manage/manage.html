@@ -35,7 +35,7 @@
                             <img class="icon-btn" src="{{ url_for('static', filename='images/icons/view.png') }}"
                                 alt="view">
                         </a>
-                        <a class="action-cell edit-cell" href="{{ url_for('manage.edit', id=row.id) | escape }}">
+                        <a class="action-cell edit-cell" href="{{ url_for('manage.update_info', id=row.id) | escape }}">
                             <img class="icon-btn" src="{{ url_for('static', filename='images/icons/edit.png') }}"
                                 alt="edit">
                         </a>

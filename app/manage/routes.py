@@ -1,8 +1,11 @@
 from flask import render_template, url_for, redirect, request, flash
+
 from app.manage import bp
 from app.extensions import db
 from app.models.models import Models
 from app.app_utils import LOGGER, sanitize, username
+
+from app.forms.default_form import DefaultForm
 
 from datetime import datetime
 
@@ -30,75 +33,45 @@ def view(id):
     return render_template('./manage/view.html', nav_id="manage-page", data=data, username=username())
 
 # ==============================================================================================================
-@bp.route('/add')
-def add():
-    '''
-    Generates add new data page
-
-    Parameter(s): None
-
-    Output(s):
-        returns add.html page
-    '''
-    return render_template('./manage/add.html', nav_id="add-page", username=username())
-
-# ==============================================================================================================
-@bp.route('/add_info', methods=['POST'])
+@bp.route('/add_info', methods=['GET', 'POST'])
 def add_info():
     '''
-    Processes the new data and adds it to the database
-    
+    Generates an add new data page
+
     Parameter(s): None
 
     Output(s):
-        None, redirects to the manage page
+        Redirects to manage page if the record was successfully added, else returns an add page
     '''
-    try:
-        # Get all the form fields
-        name = sanitize(request.form.get('name', type=str))
-        date_str = request.form.get('date')
-        message = request.form.get('message', type=str)
 
-        if not (name and date_str):
-            raise ValueError("Name and Date fields are required.")
-        
-        # Convert date string to datetime object
-        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    # Get form data and varify contents
+    form = DefaultForm(request.form)
 
-        # Adding and commit new data to the database
-        new_info = Models(name=name, date=date, message=message)
-        db.session.add(new_info)
-        db.session.commit()
+    if form.validate_on_submit():
+        try:
+            # Adding new data to the database
+            new_record = Models(
+                name=form.name.data, 
+                date=form.date.data, 
+                message=form.message.data
+            )
+            # Committing new data
+            db.session.add(new_record)
+            db.session.commit()
 
-    except ValueError as e:
-        LOGGER.error(f'Error adding new info: {e}')
-        flash("Error: Invalid input.", "error")
+            return redirect(url_for('manage.index'))
 
-    except Exception as e:
-        LOGGER.error(f'An error occurred when adding the new info: {e}')
-        flash("Error: Something went wrong.", "error")
+        except Exception as e:
+            # Roll back the session in case of an error
+            db.session.rollback()
+            LOGGER.error(f"An Error occurred when adding data to the database: {e}")
+            flash("Failed to add record!", "error")
 
-    return redirect(url_for('manage.index'))
-
-# ==============================================================================================================
-@bp.route('/edit/<int:id>', methods=['GET', 'POST'])
-def edit(id):
-    '''
-    Retrieves the queried data from the database for editing
-
-    Parameter(s):
-        key (int): the primary key of the question being deleted from the database
-
-    Output(s):
-        None, redirects to the edit page
-    '''
-    # Get the data upon the first instance of the key
-    data = Models.query.filter_by(id=id).first()
-    return render_template('./manage/edit.html', nav_id="manage-page", data=data, username=username())
+    return render_template('./manage/add.html', nav_id="add-page", username=username(), form=form)
 
 # ==============================================================================================================
 
-@bp.route('/update_info/<int:id>', methods=['POST'])
+@bp.route('/update_info/<int:id>', methods=['GET','POST'])
 def update_info(id):
     '''
     Processes the new data and updates the database
@@ -107,42 +80,39 @@ def update_info(id):
         id (int): the primary key of the record being updated
 
     Output(s):
-        None, redirects to the manage page
+        Redirects to the manage page if record was successfully added, else returns an edit page
     '''
-    try:
-        # Check if the record exists
-        data = Models.query.get(id)
+    record = Models.query.get(id)
 
-        if data is None:
-            raise ValueError("Record not found.")
+    # Check if the record exists
+    if record is None:
+        flash("Record not found.")
+        return redirect(request.referrer or url_for('manage.index'))
 
-        # Get all the form fields
-        updated_name = sanitize(request.form.get('name', type=str))
-        updated_date_str = request.form.get('date')
-        updated_message = request.form.get('message', type=str)
-        
-        # Parse and validate the updated date
-        if updated_date_str:
-            updated_date = datetime.strptime(updated_date_str, '%Y-%m-%d').date()
-            data.date = updated_date
+    # Get form data and varify contents
+    form = DefaultForm(request.form)
+    if form.validate_on_submit():
+        try:
+            
+            if form.name.data:
+                record.name = form.name.data
+            if form.date.data:
+                record.date = form.date.data
+            if form.message.data:
+                record.message = form.message.data
 
-        if updated_name:
-            data.name = updated_name
-        if updated_message:
-            data.message = updated_message
+            # Commit new data to the database
+            db.session.commit()
 
-        # Commit new data to the database
-        db.session.commit()
+            return redirect(url_for('manage.index'))
 
-    except ValueError as e:
-        LOGGER.error(f'Error updating record: {e}')
-        flash("Error: Invalid input.", "error")
-
-    except Exception as e:
-        LOGGER.error(f'An error occurred when updating record: {e}')
-        flash("Error: Something went wrong.", "error")
-
-    return redirect(url_for('manage.index'))
+        except Exception as e:
+            # Roll back the session in case of an error
+            db.session.rollback()
+            LOGGER.error(f"An Error occurred when updating record: {e}")
+            flash("Failed to update record!", "error")
+    
+    return render_template('./manage/edit.html', nav_id="manage-page", username=username(), data=record, form=form)
 
 # ==============================================================================================================
 @bp.route("/delete/<int:id>")
