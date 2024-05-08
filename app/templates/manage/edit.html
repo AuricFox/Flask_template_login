@@ -15,7 +15,7 @@
     </div>
     <div class="form-topic">
         {{ form.message.label(class="title") }}
-        {{ form.message(value=data.message | escape) }}
+        <textarea id="message" name="message">{{ data.message }}</textarea>
     </div>
     <button class="link center" type="submit">Update Info</button>
 </form>

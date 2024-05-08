@@ -3,16 +3,20 @@ from flask import render_template, url_for, redirect, request, flash
 from app.manage import bp
 from app.extensions import db
 from app.models.models import Models
-from app.app_utils import LOGGER, sanitize, username
+from app.app_utils import LOGGER, username
 
 from app.forms.default_form import DefaultForm
 
-from datetime import datetime
-
-# Routes for pages associated with manage page
-
 @bp.route('/')
 def index():
+    '''
+    Renders the main management page for the default database
+
+    Parameter(s): None
+
+    Output(s):
+        A rendered manage.html page
+    '''
     data = Models.query.all()
     return render_template('./manage/manage.html', nav_id="manage-page", data=data, username=username())
 
@@ -90,7 +94,7 @@ def update_info(id):
         return redirect(request.referrer or url_for('manage.index'))
 
     # Get form data and varify contents
-    form = DefaultForm(request.form)
+    form = DefaultForm(form=request.form)
     if form.validate_on_submit():
         try:
             
@@ -111,7 +115,7 @@ def update_info(id):
             db.session.rollback()
             LOGGER.error(f"An Error occurred when updating record: {e}")
             flash("Failed to update record!", "error")
-    
+
     return render_template('./manage/edit.html', nav_id="manage-page", username=username(), data=record, form=form)
 
 # ==============================================================================================================
