@@ -19,7 +19,10 @@
     </div>
     <div class="form-topic">
         {{ form.is_admin.label(class='title') }}
-        {{ form.is_admin(value=user.is_admin | escape) }}
+        <label class="toggle-element" for="is_admin">
+            <input type="checkbox" class="toggle-input" id="is_admin" name="is_admin" {% if user.is_admin %}checked{% endif %}>
+            <div class="toggle-fill"></div>
+        </label>
     </div>
     <button class="link center" type="submit">Update Profile</button>
 </form>

@@ -504,11 +504,11 @@ tr:last-child td {
     width: 95%;
 }
 
-.form-topic:first-child{
+.form-topic:first-child {
     margin-top: 8px;
 }
 
-.record-form input,
+.record-form input:not([type='checkbox']),
 .record-form textarea {
     background-color: #eee;
     border: none;
@@ -518,6 +518,52 @@ tr:last-child td {
     max-width: 100%;
     min-width: 100%;
     outline: none;
+}
+
+.toggle-element {
+    --width: 50px;
+    --height: calc(var(--width) / 2);
+    --border-radius: calc(var(--height) / 2);
+
+    display: inline-block;
+    cursor: pointer;
+    align-self: first baseline;
+}
+
+.toggle-input {
+    display: none;   
+    width: 100px;
+    height: 100px;
+}
+
+.toggle-fill {
+    position: relative;
+    width: var(--width);
+    height: var(--height);
+    border-radius: var(--border-radius);
+    background: #dddddd;
+    transition: background 0.2s;
+}
+
+.toggle-input:checked ~ .toggle-fill {
+    background: #512da8;
+}
+
+.toggle-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: var(--height);
+    width: calc(var(--width) / 2);
+    background: #FFFFFF;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    border-radius: var(--border-radius);
+    transition: transform 0.2s;
+}
+
+.toggle-input:checked ~ .toggle-fill::after {
+    transform: translate(var(--height));
 }
 
 /* ========== footer ========== */
