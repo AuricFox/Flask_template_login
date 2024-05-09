@@ -94,7 +94,8 @@ Flask_template_login
 │   ├───forms
 │   │   ├───default_form.py
 │   │   ├───login_form.py
-|   |   └───register_form.py
+│   │   ├───register_form.py
+|   |   └───user_form.py
 │   ├───main
 │   │   ├───__init__.py
 |   |   └───routes.py
