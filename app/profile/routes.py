@@ -2,7 +2,8 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required
 
 from app.profile import bp
-from app.app_utils import LOGGER, curr_user, update_user_record, delete_user_record
+from app.app_utils import LOGGER, get_current_user, update_user_record, delete_user_record
+from app.forms.profile_form import ProfileForm
 
 # ==============================================================================================================
 # User Profile Pages
@@ -17,72 +18,58 @@ def index():
         User must be logged in
 
     Output(s):
-        Redirects to the home page if id is None, else redirects to the user's profile page
+        Redirects to the home page if  is None, else redirects to the user's profile page
     '''
-    user = curr_user()
+    user = get_current_user()
+    # Check if the user is logged in
     if not user:
-        return redirect(request.referrer or url_for('main.index'))
+        return redirect(url_for('auth.index'))
     
     # Get the data upon the first instance of the key
     #user = get_user_record(user_id=user_id)
     return render_template('./profile/view_profile.html', nav_id="home-page", user=user, username=user.name)
 
 # ==============================================================================================================
-@bp.route('/edit_profile', methods=['GET', 'POST'])
+@bp.route('/edit_profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
     '''
-    Retrieves the queried data from the database for editing
-
-    Parameter(s):
+    Updates the users credentials
+    
+    Parameter(s): 
         User must be logged in
 
     Output(s):
-        Redirects to the edit page if id is not None, else redirects to referrer or home page
-    '''
-    user = curr_user()
-    if not user:
-        return redirect(request.referrer or url_for('auth.index'))
-
-    # Get the data upon the first instance of the key
-    #user = get_user_record(user_id=id)
-    return render_template('./profile/edit_profile.html', nav_id="home-page", user=user, username=user.name)
-
-# ==============================================================================================================
-@bp.route('/update_profile', methods=['POST'])
-@login_required
-def update_profile():
-    '''
-    Processes the new data and updates the database
-    
-    Parameter(s): 
-        id (int): the primary key of the record being updated
-
-    Output(s):
-        None, redirects to the manage page
+        An html page for editing profile info if logged in or post fails, else redirects to login page
     '''
     try:
-        user_id = curr_user().id
-        if not user_id:
-            return redirect(request.referrer or url_for('auth.index'))
+        user = get_current_user()
+        if not user:
+            return redirect(url_for('auth.index'))
     
-        # Get all the form fields
-        name = request.form.get('name', type=str)
-        email = request.form.get('email', type=str)
-        password = request.form.get('password', type=str)
+        form = ProfileForm(form=request.form)
+        # Check Form validation
+        if form.validate_on_submit():
 
-        status = update_user_record(user_id=user_id, username=name, email=email, password=password)
+            status = update_user_record(
+                user_id=user.id, 
+                username=form.username.data, 
+                email=form.email.data, 
+                password=form.password.data
+            )
 
-        if status:
-            flash("Update Successful!", "success")
-        else:
-            raise Exception("Update failed")        
+            # Check if the profile was successfully updated
+            if status:
+                flash("Update Successful!", "success")
+                return redirect(url_for('profile.index'))
+            else:
+                raise Exception("Update failed")        
 
     except Exception as e:
         LOGGER.error(f'An error occurred when updating record: {e}')
         flash("Failed to update record!", "error")
-
-    return redirect(url_for('profile.index'))
+        
+    return render_template('./profile/edit_profile.html', nav_id="home-page", user=user, username=user.name, form=form)
 
 # ==============================================================================================================
 @bp.route("/delete_profile")
@@ -98,12 +85,12 @@ def delete_profile():
         None, redirects to the manage page
     '''
     try:
-        user_id = curr_user().id
-        if not user_id:
-            return redirect(request.referrer or url_for('auth.index'))
+        user = get_current_user()
+        if not user:
+            return redirect(url_for('auth.index'))
         
         # Query database for question and delete it
-        status = delete_user_record(user_id=user_id)
+        status = delete_user_record(user_id=user.id)
 
         if status:
             flash("Successfully deleted record!", "success")
@@ -114,4 +101,4 @@ def delete_profile():
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
     
-    return redirect(url_for('main.index'))
+    return redirect(url_for('profile.index'))

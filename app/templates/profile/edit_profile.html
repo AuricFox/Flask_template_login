@@ -3,22 +3,24 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-<form class="record-form shadow" action="{{ url_for('profile.update_profile') }}" method="post" enctype="multipart/form-data">
+<form class="record-form shadow" action="{{ url_for('profile.edit_profile') }}" method="post" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    {{ form.id(value=user.id) }}
     <div class="form-topic">
-        <label for="name" class="title">Username</label>
-        <input id="name" name="name" rows="4" value="{{ user.name | escape }}">
+        {{ form.username.label(class='title') }}
+        {{ form.username(value=user.name | escape) }}
     </div>
     <div class="form-topic">
-        <label for="date" class="title">Email</label>
-        <input id="email" name="email" rows="4" value="{{ user.email | escape }}">
+        {{ form.email.label(class='title') }}
+        {{ form.email(value=user.email | escape) }}
     </div>
     <div class="form-topic">
-        <label for="password" class="title">Password </label>
-        <input id="password" name="password" rows="4">
+        {{ form.password.label(class='title') }}
+        {{ form.password }}
     </div>
     <div class="form-topic">
-        <label for="is-admin" class="title">Admin Privileges</label>
-        <input id="is-admin" name="is-admin" rows="4" value="{{ user.is_admin | escape }}">
+        {{ form.confirm.label(class='title') }}
+        {{ form.confirm }}
     </div>
     <button class="link center" type="submit">Update Profile</button>
 </form>
