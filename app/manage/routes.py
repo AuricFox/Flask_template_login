@@ -3,7 +3,7 @@ from flask import render_template, url_for, redirect, request, flash
 from app.manage import bp
 from app.extensions import db
 from app.models.models import Models
-from app.app_utils import LOGGER, username
+from app.app_utils import LOGGER, get_username
 
 from app.forms.default_form import DefaultForm
 
@@ -18,7 +18,7 @@ def index():
         A rendered manage.html page
     '''
     data = Models.query.all()
-    return render_template('./manage/manage.html', nav_id="manage-page", data=data, username=username())
+    return render_template('./manage/manage.html', nav_id="manage-page", data=data, username=get_username())
 
 # ==============================================================================================================
 @bp.route('/view/<int:id>')
@@ -34,7 +34,7 @@ def view(id):
     '''
     # Get the data upon the first instance of the key
     data = Models.query.filter_by(id=id).first()
-    return render_template('./manage/view.html', nav_id="manage-page", data=data, username=username())
+    return render_template('./manage/view.html', nav_id="manage-page", data=data, username=get_username())
 
 # ==============================================================================================================
 @bp.route('/add_info', methods=['GET', 'POST'])
@@ -71,7 +71,7 @@ def add_info():
             LOGGER.error(f"An Error occurred when adding data to the database: {e}")
             flash("Failed to add record!", "error")
 
-    return render_template('./manage/add.html', nav_id="add-page", username=username(), form=form)
+    return render_template('./manage/add.html', nav_id="add-page", username=get_username(), form=form)
 
 # ==============================================================================================================
 
@@ -116,7 +116,7 @@ def update_info(id):
             LOGGER.error(f"An Error occurred when updating record: {e}")
             flash("Failed to update record!", "error")
 
-    return render_template('./manage/edit.html', nav_id="manage-page", username=username(), data=record, form=form)
+    return render_template('./manage/edit.html', nav_id="manage-page", username=get_username(), data=record, form=form)
 
 # ==============================================================================================================
 @bp.route("/delete/<int:id>")

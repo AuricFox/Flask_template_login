@@ -5,7 +5,7 @@ from app.admin import bp
 from app.models.models import User
 
 from app.forms.user_form import UserForm
-from app.app_utils import LOGGER, curr_user, get_user_record
+from app.app_utils import LOGGER, get_current_user, get_user_record
 from app.extensions import bcrypt, db
 
 # ==============================================================================================================
@@ -23,7 +23,7 @@ def index():
     Output(s):
         A HTML template with all the registered users
     '''
-    admin = curr_user()
+    admin = get_current_user()
     # Check if the current user has admin privileges
     if not admin.is_admin:
         return redirect(url_for('main.index'))
@@ -44,7 +44,7 @@ def view_user(id):
     Output(s):
         Redirects to the home page if id is None, else redirects to the user's profile page
     '''
-    admin = curr_user()
+    admin = get_current_user()
     # Check if the current user has admin privileges
     if not admin.is_admin:
         return redirect(url_for('main.index'))
@@ -69,7 +69,7 @@ def update_user(id):
         None, redirects to the manage page
     '''
     try:
-        admin = curr_user()
+        admin = get_current_user()
         # Check if the user has admin access
         if not admin.is_admin:
             return redirect(url_for('main.index'))
@@ -119,7 +119,7 @@ def delete(id):
         None, redirects to the manage page
     '''
     try:
-        admin = curr_user()
+        admin = get_current_user()
         if not admin.is_admin:
             return redirect(url_for('auth.index'))
         

@@ -36,7 +36,7 @@ def sanitize(text:str) -> str:
     return re.sub(r'[\\/*?:"<>|]', '_', text)
 
 # =========================================================================================
-def verify_file(file:str):
+def verify_file(file:str) -> bool:
     '''
     Verifies input file
 
@@ -176,7 +176,7 @@ def update_user_record(user_id:int, username:str=None, email:str=None, password:
         return False
 
 # =========================================================================================
-def delete_user_record(user_id:int):
+def delete_user_record(user_id:int) -> bool:
     '''
     Deletes user record from the database
     
@@ -207,7 +207,7 @@ def delete_user_record(user_id:int):
         return False
 
 # =========================================================================================
-def curr_user():
+def get_current_user():
     '''
     Gets the info of the current user that's logged in
     
@@ -219,7 +219,7 @@ def curr_user():
     return current_user if current_user.is_authenticated else None
    
 # =========================================================================================
-def username() -> str:
+def get_username() -> str:
     '''
     Gets the username of the logged in user
     
