@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField, BooleanField
-from wtforms.validators import DataRequired, Optional, Length
+from wtforms.validators import Optional, Length
 
 from app.models.models import User
 
 class UserForm(FlaskForm):
     '''
-    Used for validating User registration
+    Used for validating User credentials for admin functionality
     '''
     username = StringField(
         "Username", validators=[Optional(), Length(min=6, max=100)]

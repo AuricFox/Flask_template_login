@@ -6,7 +6,7 @@ from app.models.models import User
 
 class RegisterForm(FlaskForm):
     '''
-    Used for validating User registration
+    Used for validating User registration and profile information
     '''
     username = StringField(
         "Username", validators=[DataRequired(), Length(min=6, max=100)]
@@ -18,12 +18,25 @@ class RegisterForm(FlaskForm):
         "Password", validators=[DataRequired(), Length(min=8, max=100)]
     )
     '''
+    NOTE: Not currently implemented
     confirm = PasswordField(
-        "Repeat password",
+        "Repeat Password",
         validators=[DataRequired(), EqualTo("password", message="Passwords must match."),
         ]
     )
     '''
+    # ==============================================================================================================
+    def username_validator(self, field):
+        '''
+        Validate username to see if it is already registered
+
+        Parameter(s):
+            field: username field from the submitted form
+
+        Output(s):
+            True if the username is not taken, else false
+        '''
+        return False if User.query.filter_by(name=field.data).first() else True
     # ==============================================================================================================
     def email_validator(self, field):
         '''
@@ -45,7 +58,12 @@ class RegisterForm(FlaskForm):
         initial_validation = super(RegisterForm, self).validate(extra_validators)
         if not initial_validation:
             return False
-    
+
+        # Check if the username exists
+        if not self.username_validator(self.email):
+            self.username.errors.append("Username already Exists")
+            return False
+
         # Check if the email exists
         if not self.email_validator(self.email):
             self.email.errors.append("Email already Exists")
