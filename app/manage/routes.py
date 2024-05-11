@@ -47,12 +47,12 @@ def add_info():
     Output(s):
         Redirects to manage page if the record was successfully added, else returns an add page
     '''
+    try:
+        # Get form data and varify contents
+        form = DefaultForm(request.form)
 
-    # Get form data and varify contents
-    form = DefaultForm(request.form)
+        if form.validate_on_submit():
 
-    if form.validate_on_submit():
-        try:
             # Adding new data to the database
             new_record = Models(
                 name=form.name.data, 
@@ -65,11 +65,11 @@ def add_info():
 
             return redirect(url_for('manage.index'))
 
-        except Exception as e:
-            # Roll back the session in case of an error
-            db.session.rollback()
-            LOGGER.error(f"An Error occurred when adding data to the database: {e}")
-            flash("Failed to add record!", "error")
+    except Exception as e:
+        # Roll back the session in case of an error
+        db.session.rollback()
+        LOGGER.error(f"An Error occurred when adding data to the database: {e}")
+        flash("Failed to add record!", "error")
 
     return render_template('./manage/add.html', nav_id="add-page", username=get_username(), form=form)
 
@@ -86,35 +86,35 @@ def update_info(id):
     Output(s):
         Redirects to the manage page if record was successfully added, else returns an edit page
     '''
-    record = Models.query.get(id)
+    try:
+        record = Models.query.get(id)
+    
+        # Check if the record exists
+        if record is None:
+            flash("Record not found.")
+            return redirect(request.referrer or url_for('manage.index'))
+    
+        # Get form data and varify contents
+        form = DefaultForm(form=request.form)
+        if form.validate_on_submit():
+                
+                if form.name.data:
+                    record.name = form.name.data
+                if form.date.data:
+                    record.date = form.date.data
+                if form.message.data:
+                    record.message = form.message.data
+    
+                # Commit new data to the database
+                db.session.commit()
+    
+                return redirect(url_for('manage.index'))
 
-    # Check if the record exists
-    if record is None:
-        flash("Record not found.")
-        return redirect(request.referrer or url_for('manage.index'))
-
-    # Get form data and varify contents
-    form = DefaultForm(form=request.form)
-    if form.validate_on_submit():
-        try:
-            
-            if form.name.data:
-                record.name = form.name.data
-            if form.date.data:
-                record.date = form.date.data
-            if form.message.data:
-                record.message = form.message.data
-
-            # Commit new data to the database
-            db.session.commit()
-
-            return redirect(url_for('manage.index'))
-
-        except Exception as e:
-            # Roll back the session in case of an error
-            db.session.rollback()
-            LOGGER.error(f"An Error occurred when updating record: {e}")
-            flash("Failed to update record!", "error")
+    except Exception as e:
+        # Roll back the session in case of an error
+        db.session.rollback()
+        LOGGER.error(f"An Error occurred when updating record: {e}")
+        flash("Failed to update record!", "error")
 
     return render_template('./manage/edit.html', nav_id="manage-page", username=get_username(), data=record, form=form)
 

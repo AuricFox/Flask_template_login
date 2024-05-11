@@ -22,7 +22,7 @@
             {{ form.date(class='error-element', value=data.date | escape) }}
             <p class="error-message">{{ form.date.errors[0] }}</p>
         {% else %}
-            {{ form.name(value=data.date | escape) }}
+            {{ form.date(value=data.date | escape) }}
         {% endif %}
     </div>
     <div class="form-topic">
