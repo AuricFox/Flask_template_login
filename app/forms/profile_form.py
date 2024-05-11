@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField, HiddenField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, ValidationError
 
 from app.models.models import User
 
@@ -18,12 +18,11 @@ class ProfileForm(FlaskForm):
         "Email", validators=[DataRequired(), Length(min=6, max=100)]
     )
     password = PasswordField(
-        "Password", validators=[DataRequired(), Length(min=8, max=100)]
+        "Password", validators=[Optional(), Length(min=8, max=100)]
     )
     confirm = PasswordField(
         "Confirm Password",
-        validators=[DataRequired(), EqualTo("password", message="Passwords must match."),
-        ]
+        validators=[Optional(), EqualTo("password", message="Passwords must match.")]
     )
 
     # ==============================================================================================================
@@ -45,6 +44,7 @@ class ProfileForm(FlaskForm):
     def validate_email(self, field):
         '''
         Validate the user's email to see if it is registered to another user or not
+        NOTE: This function only checks for basic email inputs in the database not real emails
 
         Parameter(s):
             field: email field from the submitted form
@@ -55,7 +55,7 @@ class ProfileForm(FlaskForm):
         existing_user = User.query.filter(User.id != self.id.data, User.email == field.data).first()
         if existing_user:
             raise ValidationError("Email address already exists!")
-        
+
     # ==============================================================================================================
     def validate(self, extra_validators=None):
         '''
@@ -69,10 +69,21 @@ class ProfileForm(FlaskForm):
         if not user:
             self.id.errors.append("Invalid user ID!")
             return False
+        
+        if self.password.data or self.confirm.data:
+            # Check if a password was enetered
+            if not self.password.data:
+                self.password.errors.append("Password is required!")
+                return False
+            
+            # Check if a confirmation password was enetered
+            if not self.confirm.data:
+                self.confirm.errors.append("Confirm password is required!")
+                return False
 
-        # Check if the two passwords are the same (password and confirmation password)
-        if self.password.data != self.confirm.data:
-            self.password.errors.append("Passwords must match!")
-            return False
+            # Check if the two passwords are the same (password and confirmation password)
+            if self.password.data != self.confirm.data:
+                self.confirm.errors.append("Passwords must match!")
+                return False
 
         return True
