@@ -186,7 +186,7 @@ body {
     width: 100%;
 }
 
-/* ========== content========== */
+/* ========== content ========== */
 .content {
     display: flex;
     flex-direction: row;
@@ -510,14 +510,18 @@ tr:last-child td {
 
 .record-form input:not([type='checkbox']),
 .record-form textarea {
-    background-color: #eee;
-    border: none;
     padding: 10px 15px;
     font-size: 13px;
     border-radius: 8px;
+    border: None;
     max-width: 100%;
     min-width: 100%;
     outline: none;
+}
+
+.record-form input:not([type='checkbox']):not(.error-element),
+.record-form textarea:not(.error-element) {
+    background-color: #eee;
 }
 
 .toggle-element {
@@ -619,4 +623,18 @@ tr:last-child td {
     justify-content: center;
     align-items: center;
     height: 20rem;
+}
+
+/* ========== Error Elements ========== */
+
+.error-message {
+    width: 100%;
+    color:red;
+    text-align: left;
+    padding: 10px 0 0 15px;
+}
+
+.error-element {
+    box-shadow: 0 0 0 1px red;
+    background: rgba(255,0,0,0.1);
 }

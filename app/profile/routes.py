@@ -95,10 +95,10 @@ def delete_profile():
         if status:
             flash("Successfully deleted record!", "success")
         else:
-            flash("Failed to delete record", "error")
             raise Exception("Deletion failed")
             
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
+        flash("Failed to delete record!", "error")
     
     return redirect(url_for('profile.index'))
