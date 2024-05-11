@@ -19,9 +19,33 @@
                 <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
             </div>
             <span>or use your email for registeration</span>
-            {{ register_form.username(placeholder="Username") }}
-            {{ register_form.email(placeholder="Email") }}
-            {{ register_form.password(placeholder="Password") }}
+            {% if register_form.username.errors %}
+                {{ register_form.username(class='error-element', placeholder="Username") }}
+                <p class="error-message">{{ register_form.username.errors[0] }}</p>
+            {% else %}
+                {{ register_form.username(placeholder="Username") }}
+            {% endif %}
+
+            {% if register_form.email.errors %}
+                {{ register_form.email(class='error-element', placeholder="Email") }}
+                <p class="error-message">{{ register_form.email.errors[0] }}</p>
+            {% else %}
+                {{ register_form.email(placeholder="Email") }}
+            {% endif %}
+
+            {% if register_form.password.errors %}
+                {{ register_form.password(class='error-element', placeholder="Password") }}
+                <p class="error-message">{{ register_form.password.errors[0] }}</p>
+            {% else %}
+                {{ register_form.password(placeholder="Password") }}
+            {% endif %}
+
+            {% if register_form.confirm.errors %}
+                {{ register_form.confirm(class='error-element', placeholder="Confirm Password") }}
+                <p class="error-message">{{ register_form.confirm.errors[0] }}</p>
+            {% else %}
+                {{ register_form.confirm(placeholder="Confirm Password") }}
+            {% endif %}
             <button class="link">Sign Up</button>
         </form>
     </div>

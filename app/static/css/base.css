@@ -631,7 +631,7 @@ tr:last-child td {
     width: 100%;
     color:red;
     text-align: left;
-    padding: 10px 0 0 15px;
+    padding-left: 15px;
 }
 
 .error-element {

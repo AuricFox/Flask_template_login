@@ -9,7 +9,7 @@
     min-height: 480px;
 }
 
-.container p{
+.container p:not(.error-message){
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.3px;

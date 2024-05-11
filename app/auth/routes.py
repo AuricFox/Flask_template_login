@@ -21,7 +21,7 @@ def index():
         A HTML login/sign-up page if the user is not logged in, else redirects to the home page or calling page
     '''
     if current_user.is_authenticated:
-        return redirect(request.referrer or url_for('main.index'))
+        return redirect(url_for('main.index'))
 
     return redirect(url_for('auth.login'))
 
@@ -38,23 +38,27 @@ def login():
     Output(s):
         A redirect to a HTML page
     '''
-    # Redirect to the calling page or home page if the user is logged in
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-    
-    # Get form data and varify contents
-    login_form = LoginForm(request.form)
-    if login_form.validate_on_submit():
+    try:
+        # Redirect to the calling page or home page if the user is logged in
+        if current_user.is_authenticated:
+            return redirect(url_for('main.index'))
+
+        # Get form data and varify contents
+        login_form = LoginForm(request.form)
+        if login_form.validate_on_submit():
+
+            user = User.query.filter_by(name=login_form.username.data).first()
+
+            # Check if the user exists and if the hashed passwords match
+            if user and bcrypt.check_password_hash(user.password, login_form.password.data):
+                login_user(user=user)
+                return redirect(url_for('main.index'))
         
-        user = User.query.filter_by(name=login_form.username.data).first()
-
-        # Check if the user exists and if the hashed passwords match
-        if not user or not bcrypt.check_password_hash(user.password, login_form.password.data):
             flash('Invalid username or password!')
-            return redirect(url_for('auth.index'))
-
-        login_user(user=user)
-        return redirect(url_for('main.index'))
+    
+    except Exception as e:
+        LOGGER.error(f"An error occurred when logging in: {e}")
+        flash("Login Failed!", "error")
 
     register_form = RegisterForm(request.form)
     return render_template('auth/login.html', nav_id="home-page", sign_up=False, login_form=login_form, register_form=register_form)
@@ -88,28 +92,33 @@ def sign_up():
     Output(s):
         A rendered HTML sign up page
     '''
-    # Redirect to the calling page or home page if the user is logged in
-    if current_user.is_authenticated:
-        return redirect(request.referrer or url_for('main.index'))
+    try:
+        # Redirect to the calling page or home page if the user is logged in
+        if current_user.is_authenticated:
+            return redirect(url_for('main.index'))
+
+        # Get form fields
+        register_form = RegisterForm()
+
+        # Process data if valid
+        if register_form.validate_on_submit():
+            # Create new user
+            new_user = User(
+                name=register_form.username.data, 
+                email=register_form.email.data, 
+                password=register_form.password.data
+            )
+
+            # Add new user to the database
+            db.session.add(new_user)
+            db.session.commit()
+
+            login_user(user=new_user)
+            return redirect(url_for('main.index'))
     
-    # Get form fields
-    register_form = RegisterForm()
-
-    # Process data if valid
-    if register_form.validate_on_submit():
-        # Create new user
-        new_user = User(
-            name=register_form.username.data, 
-            email=register_form.email.data, 
-            password=register_form.password.data
-        )
-
-        # Add new user to the database
-        db.session.add(new_user)
-        db.session.commit()
-
-        login_user(user=new_user)
-        return redirect(url_for('main.index'))
+    except Exception as e:
+        LOGGER.error(f"An error occurred when registering account: {e}")
+        flash("Failed to register account!")
     
     # Form is not submitted yet or validation failed, render sign-up page
     login_form = LoginForm()

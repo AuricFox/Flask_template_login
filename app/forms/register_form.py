@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
 from app.models.models import User
 
@@ -17,38 +17,40 @@ class RegisterForm(FlaskForm):
     password = PasswordField(
         "Password", validators=[DataRequired(), Length(min=8, max=100)]
     )
-    '''
-    NOTE: Not currently implemented
     confirm = PasswordField(
-        "Repeat Password",
+        "Confirm Password",
         validators=[DataRequired(), EqualTo("password", message="Passwords must match."),
         ]
     )
-    '''
     # ==============================================================================================================
-    def username_validator(self, field):
+    def validate_username(self, field):
         '''
-        Validate username to see if it is already registered
+        Validate username to see if it is already registered to another user
 
         Parameter(s):
             field: username field from the submitted form
 
         Output(s):
-            True if the username is not taken, else false
+            Raises a validation error if the username is register to another user
         '''
-        return False if User.query.filter_by(name=field.data).first() else True
+        user = User.query.filter_by(name=field.data).first()
+        if user:
+            raise ValidationError("Username is taken!")
+
     # ==============================================================================================================
-    def email_validator(self, field):
+    def validate_email(self, field):
         '''
-        Validate email to see if it is already registered
+        Validate email to see if it is already registered to another user
 
         Parameter(s):
             field: email field from the submitted form
 
         Output(s):
-            True if the email is not taken, else false
+            Raises a validation error if the email is register to another user
         '''
-        return False if User.query.filter_by(email=field.data).first() else True
+        user = User.query.filter_by(email=field.data).first()
+        if user:
+            raise ValidationError("Email is taken!")
 
     # ==============================================================================================================
     def validate(self, extra_validators=None):
@@ -58,22 +60,10 @@ class RegisterForm(FlaskForm):
         initial_validation = super(RegisterForm, self).validate(extra_validators)
         if not initial_validation:
             return False
-
-        # Check if the username exists
-        if not self.username_validator(self.email):
-            self.username.errors.append("Username already Exists")
-            return False
-
-        # Check if the email exists
-        if not self.email_validator(self.email):
-            self.email.errors.append("Email already Exists")
-            return False
         
         # Check if the two passwords are the same (password and confirmation password)
-        '''
         if self.password.data != self.confirm.data:
             self.password.errors.append("Passwords must match")
             return False
-        '''
         
         return True
