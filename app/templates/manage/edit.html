@@ -7,15 +7,33 @@
     {{ form.csrf_token }}
     <div class="form-topic">
         {{ form.name.label(class="title") }}
-        {{ form.name(value=data.name | escape) }}
+
+        {% if form.name.errors %}
+            {{ form.name(class='error-element', value=data.name | escape) }}
+            <p class="error-message">{{ form.name.errors[0] }}</p>
+        {% else %}
+            {{ form.name(value=data.name | escape) }}
+        {% endif %}
     </div>
     <div class="form-topic">
         {{ form.date.label(class="title") }}
-        {{ form.date(value=data.date | escape) }}
+
+        {% if form.date.errors %}
+            {{ form.date(class='error-element', value=data.date | escape) }}
+            <p class="error-message">{{ form.date.errors[0] }}</p>
+        {% else %}
+            {{ form.name(value=data.date | escape) }}
+        {% endif %}
     </div>
     <div class="form-topic">
         {{ form.message.label(class="title") }}
-        <textarea id="message" name="message">{{ data.message }}</textarea>
+
+        {% if form.message.errors %}
+            <textarea class="error-element" id="message" name="message">{{ data.message }}</textarea>
+            <p class="error-message">{{ form.message.errors[0] }}</p>
+        {% else %}
+            <textarea id="message" name="message">{{ data.message }}</textarea>
+        {% endif %}
     </div>
     <button class="link center" type="submit">Update Info</button>
 </form>
