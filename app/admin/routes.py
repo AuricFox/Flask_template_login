@@ -23,13 +23,18 @@ def index():
     Output(s):
         A HTML template with all the registered users
     '''
-    admin = get_current_user()
-    # Check if the current user has admin privileges
-    if not admin.is_admin:
-        return redirect(url_for('main.index'))
+    try:
+        admin = get_current_user()
+        # Check if the current user has admin privileges
+        if not admin.is_admin:
+            return redirect(url_for('main.index'))
 
-    users = get_user_record()
-    return render_template('./admin/manage_users.html', nav_id="manage-user-page", users=users, username=admin.name)
+        users = get_user_record()
+        return render_template('./admin/manage_users.html', nav_id="manage-user-page", users=users, username=admin.name)
+
+    except Exception as e:
+        LOGGER.error(f"An error occurred when accessing admin page: {e}")
+        return redirect(url_for('main.index'))
 
 # ==============================================================================================================
 @bp.route('/view_user/<int:id>')
@@ -44,16 +49,20 @@ def view_user(id):
     Output(s):
         Redirects to the home page if id is None, else redirects to the user's profile page
     '''
-    admin = get_current_user()
-    # Check if the current user has admin privileges
-    if not admin.is_admin:
-        return redirect(url_for('main.index'))
+    try:
+        admin = get_current_user()
+        # Check if the current user has admin privileges
+        if not admin.is_admin:
+            return redirect(url_for('main.index'))
+
+        # Get the data upon the first instance of the key
+        user = get_user_record(user_id=id)
+        return render_template('./admin/view_user.html', nav_id="home-page", user=user, username=admin.name)
     
-    user = get_user_record(user_id=id)
-    
-    # Get the data upon the first instance of the key
-    #user = get_user_record(user_id=user_id)
-    return render_template('./admin/view_user.html', nav_id="home-page", user=user, username=admin.name)
+    except Exception as e:
+        LOGGER.error(f"An error occurred when viewing info on user {id}: {e}")
+        flash("Failed to access user profile", "error")
+        return redirect(url_for('admin.index'))
 
 # ==============================================================================================================
 @bp.route('/update_user/<int:id>', methods=['GET','POST'])

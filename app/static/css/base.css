@@ -645,6 +645,10 @@ tr:last-child td {
     font-size: 10px;
 }
 
+.record-form .error-message {
+    padding-top: 10px;
+}
+
 .error-element {
     box-shadow: 0 0 0 1px red;
     background: rgba(255,0,0,0.1);

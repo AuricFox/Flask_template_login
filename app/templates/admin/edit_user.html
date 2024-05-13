@@ -5,17 +5,46 @@
 {% block content %}
 <form class="record-form shadow" action="{{ url_for('admin.update_user', id=user.id) }}" method="post" enctype="multipart/form-data">
     {{ form.csrf_token }}
+    {{ form.id(value=user.id) }}
     <div class="form-topic">
         {{ form.username.label(class='title') }}
-        {{ form.username(value=user.name | escape) }}
+
+        {% if form.username.errors %}
+            {{ form.username(class='error-element', value=user.name | escape) }}
+            <p class="error-message">{{ form.username.errors[0] }}</p>
+        {% else %}
+            {{ form.username(value=user.name | escape) }}
+        {% endif %}
     </div>
     <div class="form-topic">
         {{ form.email.label(class='title') }}
-        {{ form.email(value=user.email | escape) }}
+        
+        {% if form.email.errors %}
+            {{ form.email(class='error-element', value=user.email | escape) }}
+            <p class="error-message">{{ form.email.errors[0] }}</p>
+        {% else %}
+            {{ form.email(value=user.email | escape) }}
+        {% endif %}
     </div>
     <div class="form-topic">
         {{ form.password.label(class='title') }}
-        {{ form.password }}
+        
+        {% if form.password.errors %}
+            {{ form.password(class='error-element') }}
+            <p class="error-message">{{ form.password.errors[0] }}</p>
+        {% else %}
+            {{ form.password }}
+        {% endif %}
+    </div>
+    <div class="form-topic">
+        {{ form.confirm.label(class='title') }}
+        
+        {% if form.confirm.errors %}
+            {{ form.confirm(class='error-element') }}
+            <p class="error-message">{{ form.confirm.errors[0] }}</p>
+        {% else %}
+            {{ form.confirm }}
+        {% endif %}
     </div>
     <div class="form-topic">
         {{ form.is_admin.label(class='title') }}
