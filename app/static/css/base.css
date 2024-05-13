@@ -627,11 +627,22 @@ tr:last-child td {
 
 /* ========== Error Elements ========== */
 
+.alert-message {
+    width: 100%;
+    color: red;
+    text-align: center;
+    padding: 10px 15px;
+    background: rgba(255, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 11px;
+}
+
 .error-message {
     width: 100%;
     color:red;
     text-align: left;
     padding-left: 15px;
+    font-size: 10px;
 }
 
 .error-element {

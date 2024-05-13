@@ -54,11 +54,11 @@ def login():
                 login_user(user=user)
                 return redirect(url_for('main.index'))
         
-            flash('Invalid username or password!')
+            flash('Invalid username or password!', 'login_error')
     
     except Exception as e:
         LOGGER.error(f"An error occurred when logging in: {e}")
-        flash("Login Failed!", "error")
+        flash("Login Failed!", "login_error")
 
     register_form = RegisterForm(request.form)
     return render_template('auth/login.html', nav_id="home-page", sign_up=False, login_form=login_form, register_form=register_form)
@@ -118,7 +118,7 @@ def sign_up():
     
     except Exception as e:
         LOGGER.error(f"An error occurred when registering account: {e}")
-        flash("Failed to register account!")
+        flash("Failed to register account!", "register_error")
     
     # Form is not submitted yet or validation failed, render sign-up page
     login_form = LoginForm()

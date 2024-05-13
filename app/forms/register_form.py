@@ -63,7 +63,7 @@ class RegisterForm(FlaskForm):
         
         # Check if the two passwords are the same (password and confirmation password)
         if self.password.data != self.confirm.data:
-            self.password.errors.append("Passwords must match")
+            self.password.errors.append("Passwords must match!")
             return False
         
         return True

@@ -62,6 +62,19 @@
             <span>or use your username and password</span>
             {{ login_form.username(placeholder="Username") }}
             {{ login_form.password(placeholder="Password") }}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'login_error' %}
+                            <div class="alert-message">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
             <a href="#">Forget Your Password?</a>
             <button class="link">Sign In</button>
         </form>
