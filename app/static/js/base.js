@@ -62,3 +62,10 @@ function confirmDelete(element) {
     }
 };
 
+// ======================================================================================================
+// FLASH MESSAGES [ERRORS, WARNINGS, INFO]
+// ======================================================================================================
+// Automatically hide flash messages after 5 seconds (adjust as needed)
+setTimeout(function () {
+    $('.flash-message').fadeOut('slow');
+}, 5000);
