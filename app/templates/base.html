@@ -60,6 +60,18 @@
             <!-- Main content section -->
             <div class="topics">
                 <div class="main-topics">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                {% if category == 'error' or category == 'success' %}
+                                    <div class="flash-message">
+                                        {{ message }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
                     {% block content %}{% endblock %}
                 </div>
 

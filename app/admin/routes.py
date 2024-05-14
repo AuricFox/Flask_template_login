@@ -147,5 +147,6 @@ def delete(id):
         # Roll back the session in case of an error
         db.session.rollback()
         LOGGER.error(f"An Error occured when deleting the record: {str(e)}")
+        flash("Failed to delete user record!")
     
     return redirect(url_for('admin.index'))
