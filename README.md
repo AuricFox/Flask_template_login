@@ -94,6 +94,7 @@ Flask_template_login
 │   ├───forms
 │   │   ├───default_form.py
 │   │   ├───login_form.py
+│   │   ├───profile_form.py
 │   │   ├───register_form.py
 |   |   └───user_form.py
 │   ├───main
@@ -135,8 +136,8 @@ Flask_template_login
 |   |    ├───base.html
 |   |    └───index.html
 |   ├───__init__.py
-|   ├───extensions.py
-|   └───app_utils.py
+|   ├───app_utils.py
+|   └───extensions.py
 ├───data
 |   └───app.db
 ├───env
@@ -183,7 +184,6 @@ application or website.
 |:-----:|:----:|:-----:|:------:|
 
 - **Primary Key:** id 
-
 
 ### Data Type(s):
 
