@@ -115,9 +115,9 @@ def update_user(id):
     return render_template('./admin/edit_user.html', nav_id="home-page", user=user, username=admin.name, form=form)
 
 # ==============================================================================================================
-@bp.route("/delete/<int:id>")
+@bp.route("/delete_user/<int:id>")
 @login_required
-def delete(id):
+def delete_user(id):
     '''
     Deletes the user's profile from the database
 
