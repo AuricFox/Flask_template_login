@@ -3,7 +3,7 @@
 // ===================================================================
 var navDisplay = {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'column'
 };
 
 $('.dropbtn').click(function (event) {
@@ -44,7 +44,7 @@ function toggleLogin(){
 };
 
 // ===================================================================
-// MANAGE FLASHCARD PAGE
+// MANAGE PAGE
 // ===================================================================
 // Confirm deletion of the queried question before deleting it
 document.querySelectorAll('.delete-cell').forEach(function (element) {

@@ -74,7 +74,6 @@ def add_info():
     return render_template('./manage/add.html', nav_id="add-page", username=get_username(), form=form)
 
 # ==============================================================================================================
-
 @bp.route('/update_info/<int:id>', methods=['GET','POST'])
 def update_info(id):
     '''

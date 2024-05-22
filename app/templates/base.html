@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         {% block head %}{% endblock %}
     </head>
@@ -15,29 +16,35 @@
     <body>
         <!--Main Navigation Tile-->
         <div id="nav-bar">
-            <ul class="nav">
-                <li><a href="{{  url_for('main.index')  }}" class="dropbtn nav-tile {% if nav_id == 'home-page' %}active{% endif %}">Home</a></li>
-                <li><a href="{{  url_for('manage.index')  }}" class="dropbtn nav-tile {% if nav_id == 'manage-page' %}active{% endif %}">Manage</a></li>
-                <li><a href="{{  url_for('manage.add_info')  }}" class="dropbtn nav-tile {% if nav_id == 'add-page' %}active{% endif %}">Add Data</a></li>
-                <!-- Example Sub Navigation-->
-                <li>
-                    <div class="{% if nav_id == 'example-page' %}active{% endif %}">
-                        <div class="dropbtn nav-tile">Drop Down Menu</div>
-                        <div class="dropdown-element" style="display: none;">
-                            <a class="drop-link" href="{{  url_for('main.index')  }}">Link 1</a>
-                            <a class="drop-link" href="{{  url_for('main.index')  }}">Link 2</a>
-                            <a class="drop-link" href="{{  url_for('main.index')  }}">Link 3</a>
-                        </div>
-                    </div>
-                </li>
+            <nav class="desktop-nav-bar" >
+                <a href="{{  url_for('main.index')  }}" class="dropbtn nav-tile {% if nav_id == 'home-page' %}active{% endif %}">Home</a>
+                <a href="{{  url_for('manage.index')  }}" class="dropbtn nav-tile {% if nav_id == 'manage-page' %}active{% endif %}">Manage</a>
+                <a href="{{  url_for('manage.add_info')  }}" class="dropbtn nav-tile {% if nav_id == 'add-page' %}active{% endif %}">Add Data</a>
                 {% if current_user %}
                     {% if current_user.is_admin %}
-                    <li>
                         <a href="{{  url_for('admin.index')  }}" class="dropbtn nav-tile {% if nav_id == 'manage-user-page' %}active{% endif %}">Manage Users</a>
-                    </li>
                     {% endif %}
                 {% endif %}
-            </ul>
+            </nav>
+
+            <nav class="mobile-nav-bar">
+                <div>
+                    <div class="nav-icon dropbtn nav-tile active">
+                        <i class="fa-solid fa-list fa-xl"></i>
+                    </div>
+                    <div class="dropdown-element" style="display: none;">
+                        <a href="{{  url_for('main.index')  }}" class="dropbtn nav-tile {% if nav_id == 'home-page' %}active{% endif %}">Home</a>
+                        <a href="{{  url_for('manage.index')  }}" class="dropbtn nav-tile {% if nav_id == 'manage-page' %}active{% endif %}">Manage</a>
+                        <a href="{{  url_for('manage.add_info')  }}" class="dropbtn nav-tile {% if nav_id == 'add-page' %}active{% endif %}">Add Data</a>
+                        {% if current_user %}
+                            {% if current_user.is_admin %}
+                                <a href="{{  url_for('admin.index')  }}" class="dropbtn nav-tile {% if nav_id == 'manage-user-page' %}active{% endif %}">Manage Users</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+            
             <div class="login-tile ">
                 {% if current_user.name %}
                     <div class="login-link">{{ current_user.name }}</div>

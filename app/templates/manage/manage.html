@@ -14,7 +14,6 @@
     <table class="shadow">
         <thead>
             <tr>
-                <th class="left-txt">ID</th>
                 <th class="left-txt">Name</th>
                 <th class="left-txt">Date</th>
                 <th class="left-txt">Message</th>
@@ -24,7 +23,6 @@
         <tbody>
             {% for row in data %}
             <tr>
-                <td class="info-cell">{{ row.id | escape }}</td>
                 <td class="info-cell">{{ row.name | escape }}</td>
                 <td class="info-cell">{{ row.date | escape }}</td>
                 <td class="info-cell">{{ row.message | escape }}</td>
