@@ -149,6 +149,10 @@ body {
 
 .login-link {
     background-color: #512da8;
+    max-width: 8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .slide-bar {

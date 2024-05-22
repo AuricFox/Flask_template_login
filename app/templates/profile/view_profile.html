@@ -3,7 +3,6 @@
 {% block title %}View Profile{% endblock %}
 
 {% block content %}
-
 <div class="topic">
     <div>
         <div class="title center-txt">Username</div>
@@ -21,6 +20,28 @@
     <a class="link center-txt" href="{{ url_for('profile.edit_profile') | escape }}">
         Edit Profile
     </a>
+    <a class="link center-txt delete-cell" href="#" data-record="{{ user.id | escape }}">
+        Delete Profile
+    </a>
 </div>
+{% endblock %}
 
+{% block scripts %}
+<script>
+    // Confirm deletion of the queried question before deleting it
+    document.querySelectorAll('.delete-cell').forEach(function (element) {
+        element.addEventListener('click', function () {
+            confirmDelete(element.dataset.record);
+        });
+    });
+
+    // Display window prompt
+    function confirmDelete(element) {
+        var record = element;
+        var result = confirm("Are you sure you want to delete this record?");
+        if (result) {
+            window.location.href = "delete_profile";
+        }
+    };
+</script>
 {% endblock %}

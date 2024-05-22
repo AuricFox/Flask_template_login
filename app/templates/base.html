@@ -47,7 +47,7 @@
             
             <div class="login-tile ">
                 {% if current_user.name %}
-                    <div class="login-link">{{ current_user.name }}</div>
+                    <a class="login-link" href="{{ url_for('profile.index') }}">{{ current_user.name }}</a>
                     <a class="signup-link" href="{{ url_for('auth.log_out') }}">Log Out</a>
                 {% else %}
                     <a class="login-link" href="{{  url_for('auth.login')  }}">Log in</a>
