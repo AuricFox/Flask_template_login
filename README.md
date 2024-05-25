@@ -53,19 +53,19 @@ python wsgi.py
 The server will start running, and you can access the application by navigating to `http://localhost:5000` in your web browser.
 
 ## Export Secret Key and Database URI
-    Note: Use `set` for windows and `export` for macOS.
-    ```
-    set SECRET_KEY="your secret key"
-    set DATABASE_URI="postgresql://username:password@host:port/database_name"
-    ```
+Note: Use `set` for windows and `export` for macOS.
+```
+set SECRET_KEY="your secret key"
+set DATABASE_URI="postgresql://username:password@host:port/database_name"
+```
 
-    Check if the Secret Key was set:
-    ```
-    echo %SECRET_KEY%  # Windows
-    ```
-    ```
-    echo $SECRET_KEY   # Unix-like
-    ```
+Check if the Secret Key was set:
+```
+echo %SECRET_KEY%  # Windows
+```
+```
+echo $SECRET_KEY   # Unix-like
+```
 
 ## Adding an Admin Account From the Terminal
 
