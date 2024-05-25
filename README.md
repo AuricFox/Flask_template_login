@@ -45,16 +45,18 @@ To get started, follow these steps:
     * **Flask-Testing:** an extension that provides unit testing utilities for Flask.
     * **Python-Dotenv:** allows use of environment variables in python projects.
 
-5. **Run Server:**
+## Run Server
     ```
     python wsgi.py
     ```
+
     The server will start running, and you can access the application by navigating to `http://localhost:5000` in your web browser.
 
-6. **Export Secret Key:**  
+## Export Secret Key and Database URI
     Note: Use `set` for windows and `export` for macOS.
     ```
     set SECRET_KEY="your secret key"
+    set DATABASE_URI="postgresql://username:password@host:port/database_name"
     ```
 
     Check if the Secret Key was set:
@@ -65,16 +67,27 @@ To get started, follow these steps:
     echo $SECRET_KEY   # Unix-like
     ```
 
-7. **Export Database URI:**  
-    Note: Use `set` for windows and `export` for macOS.
-    ```
-    set DATABASE_URI="postgresql://username:password@host:port/database_name"
-    ```
+## Adding an Admin Account From the Terminal
 
-## Default Administrator
+To add an admin account execute the following command from the base directory:
 
-* **Username:** Default Admin
-* **Password:** 123456789
+```
+python commands.py add_admin
+```
+
+You will be prompted to add a Username, email, and password.
+
+
+## Running Tests
+
+All the test scripts are located it the `tests` directory. They enable you to test the routes, models, and user inputs. To run the tests, 
+execute the following command in the terminal from the base directory:
+
+```
+python commands.py test
+```
+
+You should see all the tests being executed followed by the number of tests run and the status.
 
 ## File Structure
 
