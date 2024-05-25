@@ -16,18 +16,19 @@ logging.basicConfig(
 
 LOGGER = logging.getLogger(__name__)
 
-def init_app():
+def init_app(configure='config.DevConfig'):
     '''
     Initializes the flask application
 
-    Parameter(s): None
+    Parameter(s):
+        configure (default='config.DevConfig'): app environment configuration
 
     Output(s):
         app (Object): flask application object
     '''
     app = Flask(__name__, instance_relative_config=False)
     # NOTE: Configured for development
-    app.config.from_object('config.DevConfig')
+    app.config.from_object(configure)
 
     # NOTE: Initialize Plugins here
     db.init_app(app)

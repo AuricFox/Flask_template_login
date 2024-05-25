@@ -28,6 +28,10 @@ class Config:
     '''
     Base config
     '''
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    WTF_CSRF_ENABLED = True
     SECRET_KEY = 'df0331cefc6c2b9a5dserknvwier726a5d1c0fd37324feba25506'
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
@@ -50,8 +54,6 @@ class ProdConfig(Config):
     Production config
     '''
     FLASK_ENV = "production"
-    FLASK_DEBUG = False
-    DATABASE_URI = environ.get('PROD_DATABASE_URI')
 
 
 class DevConfig(Config):
@@ -59,5 +61,15 @@ class DevConfig(Config):
     Development config
     '''
     FLASK_ENV = "development"
-    FLASK_DEBUG = True
-    DATABASE_URI = environ.get('DEV_DATABASE_URI')
+    DEVELOPMENT = True
+
+class TestingConfig(Config):
+    '''
+    Testing config
+    '''
+    FLASK_ENV = "testing"
+    TESTING = True
+    DEBUG = True
+    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = environ.get('TEST_DATABASE_URI')\
+        or 'sqlite:///' + path.join(BASEDIR, './data/app_test.db')
