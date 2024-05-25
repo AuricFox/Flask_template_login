@@ -45,12 +45,12 @@ To get started, follow these steps:
     * **Flask-Testing:** an extension that provides unit testing utilities for Flask.
     * **Python-Dotenv:** allows use of environment variables in python projects.
 
-## Run Server
-    ```
-    python wsgi.py
-    ```
+## Running Server
+```
+python wsgi.py
+```
 
-    The server will start running, and you can access the application by navigating to `http://localhost:5000` in your web browser.
+The server will start running, and you can access the application by navigating to `http://localhost:5000` in your web browser.
 
 ## Export Secret Key and Database URI
     Note: Use `set` for windows and `export` for macOS.
