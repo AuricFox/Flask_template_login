@@ -11,7 +11,7 @@ class Test_Main_Pages(BaseTestCase):
         response = self.client.get("/", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Home", response.data)
-
+    # ==============================================================================================================
     def test_manage_page(self):
         '''
         Tests the manage page
@@ -19,7 +19,7 @@ class Test_Main_Pages(BaseTestCase):
         response = self.client.get("/manage", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Manage", response.data)
-
+    # ==============================================================================================================
     def test_add_page_get(self):
         '''
         Tests the add info page form the default database
@@ -27,7 +27,7 @@ class Test_Main_Pages(BaseTestCase):
         response = self.client.get("/manage/add_info", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Add", response.data)
-
+    # ==============================================================================================================
     def test_404_page(self):
         '''
         Tests the 404 page
@@ -35,7 +35,8 @@ class Test_Main_Pages(BaseTestCase):
         response = self.client.get('/nonexistent')
         self.assertEqual(response.status_code, 404)
         self.assertIn(b'Page Not Found', response.data)
-
+        
+# ==============================================================================================================
 class Test_User_Inputs(BaseTestCase):
 
     def test_add_page_post(self):
