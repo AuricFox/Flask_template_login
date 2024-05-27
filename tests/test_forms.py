@@ -11,7 +11,7 @@ from app.forms.user_form import UserForm
 # ==============================================================================================================
 class Test_Default_Form(BaseTestCase):
 
-    def test_validate_success_form(self):
+    def test_1_default_form(self):
         '''
         Tests the input for the default form
         '''
@@ -23,9 +23,9 @@ class Test_Default_Form(BaseTestCase):
         self.assertTrue(form.validate())
 
     #-----------------------------------------------------------------------------------------------------------
-    def test_validate_invalid_date_format_form(self):
+    def test_2_default_form(self):
         '''
-        Test for invlid date inputs into the default form
+        Test for invalid date format inputs into the default form
         '''
         form = DefaultForm(data={
             'name': 'Test User',
@@ -35,9 +35,9 @@ class Test_Default_Form(BaseTestCase):
         self.assertFalse(form.validate())
 
     #-----------------------------------------------------------------------------------------------------------
-    def test_validate_invalid_date_form(self):
+    def test_3_defaault_form(self):
         '''
-        Test for invlid date inputs into the default form
+        Test for invalid date inputs into the default form
         '''
         form = DefaultForm(data={
             'name': 'Test User',
@@ -47,7 +47,7 @@ class Test_Default_Form(BaseTestCase):
         self.assertFalse(form.validate())
 
     #-----------------------------------------------------------------------------------------------------------
-    def test_validate_no_date_form(self):
+    def test_4_default_form(self):
         '''
         Test for no date inputs into the default form
         '''
@@ -58,7 +58,7 @@ class Test_Default_Form(BaseTestCase):
         self.assertTrue(form.validate())
 
     #-----------------------------------------------------------------------------------------------------------
-    def test_validate_no_name_form(self):
+    def test_5_default_form(self):
         '''
         Test for absent name input into the default form
         '''
@@ -69,9 +69,9 @@ class Test_Default_Form(BaseTestCase):
         self.assertFalse(form.validate())
     
     #-----------------------------------------------------------------------------------------------------------
-    def test_validate_long_message(self):
+    def test_6_default_form(self):
         '''
-        Test for invlid message inputs into the default form
+        Test for invalid message inputs into the default form
         '''
         long_message = 'A' * 1002
 
@@ -83,6 +83,82 @@ class Test_Default_Form(BaseTestCase):
         self.assertFalse(form.validate())
 
 # ==============================================================================================================
+class Test_Login_form(BaseTestCase):
+
+    def test_1_login_form(self):
+        '''
+        Tests the inputs of the login form
+        '''
+        form = LoginForm(data={
+            'username': 'Test User',
+            'password': 'Test@User1'
+        })
+        self.assertTrue(form.validate())
+
+    #-----------------------------------------------------------------------------------------------------------
+    def test_2_login_form(self):
+        '''
+        Tests for missing username
+        '''
+        form = LoginForm(data={
+            'password': 'Test@User1'
+        })
+        self.assertFalse(form.validate())
+    
+    #-----------------------------------------------------------------------------------------------------------
+    def test_3_login_form(self):
+        '''
+        Tests for missing password
+        '''
+        form = LoginForm(data={
+            'username': 'Test User'
+        })
+        self.assertFalse(form.validate())
+
+    #-----------------------------------------------------------------------------------------------------------
+    def test_4_login_form(self):
+        '''
+        Tests for usernames that are less than 6 characters
+        '''
+        form = LoginForm(data={
+            'username': 'Test',
+            'password': 'Test@User1'
+        })
+        self.assertFalse(form.validate())
+    
+    #-----------------------------------------------------------------------------------------------------------
+    def test_5_login_form(self):
+        '''
+        Tests for usernames that are more than 100 characters
+        '''
+        form = LoginForm(data={
+            'username': 'T' * 102,
+            'password': 'Test@User1'
+        })
+        self.assertFalse(form.validate())
+
+    #-----------------------------------------------------------------------------------------------------------
+    def test_6_login_form(self):
+        '''
+        Tests for passwords that are less than 8 characters
+        '''
+        form = LoginForm(data={
+            'username': 'Test User',
+            'password': 'T@u1'
+        })
+        self.assertFalse(form.validate())
+
+    #-----------------------------------------------------------------------------------------------------------
+    def test_7_login_form(self):
+        '''
+        Tests for passwords that are more than 100 characters
+        '''
+        form = LoginForm(data={
+            'username': 'T' * 102,
+            'password': 'T@1' + 't' * 99
+        })
+        self.assertFalse(form.validate())
+
 
 if __name__ == "__main__":
     unittest.main()
