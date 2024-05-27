@@ -14,10 +14,10 @@ class DefaultForm(FlaskForm):
         "Name", validators=[DataRequired(), Length(max=50)]
     )
     date = DateField(
-        "Date", format='%Y-%m-%d', validators=[Optional()]
+        "Date", format='%Y-%m-%d'
     )
     message = TextAreaField(
-        "Message", validators=[Optional(), Length(max=1000)]
+        "Message", validators=[Length(max=1000)]
     )
 
     # ==============================================================================================================
@@ -32,11 +32,19 @@ class DefaultForm(FlaskForm):
             Validation error if the date is not properly formatted
         """
         if field.data:
-            try:
-                date_str = field.data.strftime('%Y-%m-%d')
-                datetime.strptime(date_str, '%Y-%m-%d')
-            except ValueError:
-                ValidationError("Invalid date format. Please use YYYY-MM-DD format!")
+            if isinstance(field.data, str):
+                try:
+                    datetime.strptime(field.data, '%Y-%m-%d')
+                except ValueError:
+                    raise ValidationError("Invalid date format. Please use YYYY-MM-DD format!")
+            else:
+                try:
+                    date_str = field.data.strftime('%Y-%m-%d')
+                    datetime.strptime(date_str, '%Y-%m-%d')
+                    
+                except ValueError:
+                    ValidationError("Invalid date format. Please use YYYY-MM-DD format!")
+                
 
     # ==============================================================================================================
     def validate_message(self, field):
