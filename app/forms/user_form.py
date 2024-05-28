@@ -27,7 +27,7 @@ class UserForm(FlaskForm):
         "Admin Privileges", validators=[Optional()]
     )
 
-     # ==============================================================================================================
+    # ==============================================================================================================
     def validate_username(self, field):
         '''
         Validates the username to see if it is registered to another user or not
@@ -38,9 +38,10 @@ class UserForm(FlaskForm):
         Output(s):
             Raises validation error if the username is taken by another user
         '''
-        existing_user = User.query.filter(User.id != self.id.data, User.username == field.data).first()
-        if existing_user:
-            raise ValidationError("Username already exists!")
+        if field.data:
+            existing_user = User.query.filter(User.id != self.id.data, User.username == field.data).first()
+            if existing_user:
+                raise ValidationError("Username already exists!")
 
     # ==============================================================================================================
     def validate_email(self, field):
@@ -54,23 +55,41 @@ class UserForm(FlaskForm):
         Output(s):
             Raises a validation error if the email is taken by another user
         '''
-        existing_user = User.query.filter(User.id != self.id.data, User.email == field.data).first()
-        if existing_user:
-            raise ValidationError("Email address already exists!")
+        if field.data:
+            existing_user = User.query.filter(User.id != self.id.data, User.email == field.data).first()
+            if existing_user:
+                raise ValidationError("Email address already exists!")
 
     # ==============================================================================================================
     def validate(self, extra_validators=None):
         '''
         Validates the submitted form data
         '''
+        
         initial_validation = super(UserForm, self).validate(extra_validators)
         if not initial_validation:
             return False
-    
+
         user = User.query.filter_by(id=self.id.data).first()
         if not user:
             self.id.errors.append("Invalid user ID!")
             return False
+        
+        # Validate username if it exists
+        if self.username.data:
+            try:
+                self.validate_username(self.username)
+            except ValidationError as e:
+                self.username.errors.append(str(e))
+                return False
+        
+        # Validate email if it exists
+        if self.email.data:
+            try:
+                self.validate_email(self.email)
+            except ValidationError as e:
+                self.email.errors.append(str(e))
+                return False
         
         if self.password.data or self.confirm.data:
             # Check if a password was enetered
