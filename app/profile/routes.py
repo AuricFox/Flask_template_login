@@ -27,7 +27,7 @@ def index():
     
     # Get the data upon the first instance of the key
     #user = get_user_record(user_id=user_id)
-    return render_template('./profile/view_profile.html', nav_id="home-page", user=user, username=user.name)
+    return render_template('./profile/view_profile.html', nav_id="home-page", user=user, username=user.username)
 
 # ==============================================================================================================
 @bp.route('/edit_profile', methods=['GET','POST'])
@@ -69,7 +69,7 @@ def edit_profile():
         LOGGER.error(f'An error occurred when updating record: {e}')
         flash("Failed to update record!", "error")
         
-    return render_template('./profile/edit_profile.html', nav_id="home-page", user=user, username=user.name, form=form)
+    return render_template('./profile/edit_profile.html', nav_id="home-page", user=user, username=user.username, form=form)
 
 # ==============================================================================================================
 @bp.route("/delete_profile")

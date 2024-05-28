@@ -30,7 +30,7 @@ def index():
             return redirect(url_for('main.index'))
 
         users = get_user_record()
-        return render_template('./admin/manage_users.html', nav_id="manage-user-page", users=users, username=admin.name)
+        return render_template('./admin/manage_users.html', nav_id="manage-user-page", users=users, username=admin.username)
 
     except Exception as e:
         LOGGER.error(f"An error occurred when accessing admin page: {e}")
@@ -57,7 +57,7 @@ def view_user(id):
 
         # Get the data upon the first instance of the key
         user = get_user_record(user_id=id)
-        return render_template('./admin/view_user.html', nav_id="home-page", user=user, username=admin.name)
+        return render_template('./admin/view_user.html', nav_id="home-page", user=user, username=admin.username)
     
     except Exception as e:
         LOGGER.error(f"An error occurred when viewing info on user {id}: {e}")
@@ -92,7 +92,7 @@ def update_user(id):
         if form.validate_on_submit():
 
             if form.username.data:
-                user.name = form.username.data
+                user.username = form.username.data
             if form.email.data:
                 user.email = form.email.data
             if form.password.data:
@@ -112,7 +112,7 @@ def update_user(id):
         LOGGER.error(f"An error occurred when updating user record: {e}")
         flash("Failed to update record!", "error")
 
-    return render_template('./admin/edit_user.html', nav_id="home-page", user=user, username=admin.name, form=form)
+    return render_template('./admin/edit_user.html', nav_id="home-page", user=user, username=admin.username, form=form)
 
 # ==============================================================================================================
 @bp.route("/delete_user/<int:id>")

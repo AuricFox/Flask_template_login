@@ -228,4 +228,4 @@ def get_username() -> str:
     Output(s):
         The name of the user if logged in, else None
     '''
-    return current_user.name if current_user.is_authenticated else None
+    return current_user.username if current_user.is_authenticated else None
