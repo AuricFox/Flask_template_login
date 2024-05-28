@@ -117,7 +117,8 @@ Flask_template_login
 │   │   ├───__init__.py
 |   |   └───routes.py
 │   ├───models
-│   │   └───models.py
+│   │   ├───default.py
+│   │   └───user.py
 │   ├───profile
 │   │   ├───__init__.py
 |   |   └───routes.py
@@ -152,12 +153,16 @@ Flask_template_login
 |   ├───app_utils.py
 |   └───extensions.py
 ├───data
+|   ├───app_test.db
 |   └───app.db
 ├───env
 │   └───...
 ├───logs
 |   └───app.log
+├───tests
+|   └───...
 ├───.gitignore
+├───commands.py
 ├───config.py
 ├───LICENSE
 ├───README.md
@@ -172,11 +177,13 @@ Flask_template_login
 - **templates**: Maintains the organization of the HTML files that provide structure for the web pages.
 - **data**: Contains the database and any other possible data management files such as JSON files.
 - **logs**: Stores the logging information of the application. Logs info, warnings, and errors as they arise.
+- **tests**: Contains all the test cases for the application.
 - **other**: Any remaining directories (main, etc.) manages the applications blueprints and routes. These enable the end-user to navigate the 
 application or website.
 
 ## Files
 
+- **commands.py**: Enables command-line entries for adding accounts and data.
 - **config.py**: Configuration file for the Flask application that manages the settings. It configures the `secret key`, `SQLAlchemy database URI`, and more.
 - **wsgi.py**: A mediator between the web server and Python web application. Runs the overall application.
 - **extensions.py**: Manages the flask extensions like SQLAlchemy.
@@ -248,7 +255,8 @@ flask shell
 2. Run the folling code to create the table:  
 ```
 from app.extensions import db
-from app.models.models import User, Models
+from app.models.user import User
+from app.models.default import Default_Model
 db.create_all()
 ```
 
