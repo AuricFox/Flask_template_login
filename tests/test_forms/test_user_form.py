@@ -11,13 +11,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests the inputs for the user form
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id,
@@ -35,7 +29,7 @@ class Test_User_Form(BaseTestCase):
         Tests for invalid ID field in the user form
         '''
         form = UserForm(data={
-            'id': '1',
+            'id': '100',
             'username': 'Test User',
             'email': 'testing@testing.com',
             'password': 'Test@User1',
@@ -64,13 +58,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for missing username field in the user form
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id,
@@ -86,13 +74,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for missing email field in the user form
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id,
@@ -108,13 +90,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for missing password field in the user form
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id,
@@ -131,13 +107,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for missing confirmation password in the user form
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id,
@@ -154,13 +124,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for matching passwords in the user form
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id,
@@ -178,20 +142,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for duplicate usernames
         '''
-        user1 = User(
-            username='Test User1', 
-            email='testing1@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user1)
-
-        user2 = User(
-            username='Test User2', 
-            email='testing2@testing.com', 
-            password='Test@User2'
-        )
-        db.session.add(user2)
-        db.session.commit()
+        user2 = User.query.filter_by(username='Test User2').first()
 
         form = UserForm(data={
             'id': user2.id,
@@ -209,20 +160,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for duplicate emails
         '''
-        user1 = User(
-            username='Test User1', 
-            email='user1@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user1)
-
-        user2 = User(
-            username='Test User2', 
-            email='testing2@testing.com', 
-            password='Test@User2'
-        )
-        db.session.add(user2)
-        db.session.commit()
+        user2 = User.query.filter_by(username='Test User2').first()
 
         form = UserForm(data={
             'id': user2.id,
@@ -240,13 +178,7 @@ class Test_User_Form(BaseTestCase):
         '''
         Tests for all optional fields removed
         '''
-        user = User(
-            username='Test User', 
-            email='testing@testing.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
+        user = User.query.filter_by(username='Test User1').first()
 
         form = UserForm(data={
             'id': user.id
