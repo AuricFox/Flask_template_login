@@ -1,6 +1,6 @@
 import unittest
 
-from base_test import BaseTestCase, db
+from tests.base_test import BaseTestCase
 
 from app.forms.profile_form import ProfileForm
 from app.models.user import User

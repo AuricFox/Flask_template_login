@@ -1,6 +1,6 @@
 import unittest
 
-from base_test import BaseTestCase
+from tests.base_test import BaseTestCase
 
 from app.forms.default_form import DefaultForm
 

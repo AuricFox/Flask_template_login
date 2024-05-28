@@ -1,9 +1,8 @@
 import unittest
 
-from base_test import BaseTestCase, db
+from tests.base_test import BaseTestCase, db
 
 from app.forms.register_form import RegisterForm
-
 from app.models.user import User
 
 

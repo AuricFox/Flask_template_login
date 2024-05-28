@@ -13,8 +13,38 @@ cli = FlaskGroup(app)
 
 @cli.command("test")
 def test():
-    """Runs the unit tests without coverage."""
+    '''
+    Runs all the unit tests
+    '''
     tests = unittest.TestLoader().discover("tests")
+    result = unittest.TextTestRunner(verbosity=2).run(tests)
+
+    if result.wasSuccessful():
+        return 0
+    else:
+        return 1
+
+# ==============================================================================================================
+@cli.command("test_routes")
+def test_routes():
+    '''
+    Runs the unit tests for routes
+    '''
+    tests = unittest.TestLoader().discover("tests/test_routes")
+    result = unittest.TextTestRunner(verbosity=2).run(tests)
+
+    if result.wasSuccessful():
+        return 0
+    else:
+        return 1
+    
+# ==============================================================================================================
+@cli.command("test_forms")
+def test_forms():
+    '''
+    Runs the unit tests for routes
+    '''
+    tests = unittest.TestLoader().discover("tests/test_forms")
     result = unittest.TextTestRunner(verbosity=2).run(tests)
 
     if result.wasSuccessful():
