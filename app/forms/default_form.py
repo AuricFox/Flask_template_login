@@ -11,7 +11,7 @@ class DefaultForm(FlaskForm):
     A default form used for validating default data
     '''
     name = StringField(
-        "Name", validators=[DataRequired(), Length(max=50)]
+        "Name", validators=[DataRequired(), Length(max=100)]
     )
     date = DateField(
         "Date", format='%Y-%m-%d'

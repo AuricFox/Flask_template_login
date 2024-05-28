@@ -6,7 +6,8 @@ from flask.cli import FlaskGroup
 
 import app
 from app.extensions import db
-from app.models.models import Models, User
+from app.models.user import User
+from app.models.default import Default_Model
 
 cli = FlaskGroup(app)
 
@@ -53,7 +54,7 @@ def add_admin():
         return 1
     
     try:
-        user = User(name=username, email=email, password=password, is_admin=True)
+        user = User(username=username, email=email, password=password, is_admin=True)
         db.session.add(user)
         db.session.commit()
         print(f"Admin account successfully added!")
@@ -90,7 +91,7 @@ def add_data():
         date_str = datetime.strptime(date_str, '%Y-%m-%d')
     
     try:
-        data = Models(name=name, date=date_str, message=message)
+        data = Default_Model(name=name, date=date_str, message=message)
         db.session.add(data)
         db.session.commit()
         print(f"Record successfully added!")

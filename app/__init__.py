@@ -61,7 +61,7 @@ def init_app(configure='config.DevConfig'):
     return app
 
 # ====================================================================
-from app.models.models import User
+from app.models.user import User
 @login_manager.user_loader
 def load_user(user_id):
     '''

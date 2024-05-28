@@ -1,7 +1,7 @@
 from flask_login import current_user
 import logging, os, re, mimetypes
 
-from app.models.models import User
+from app.models.user import User
 from app.extensions import db, bcrypt
 
 PATH = os.path.dirname(os.path.abspath(__file__))

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
-from app.models.models import User
+from app.models.user import User
 
 class RegisterForm(FlaskForm):
     '''
@@ -33,7 +33,7 @@ class RegisterForm(FlaskForm):
         Output(s):
             Raises a validation error if the username is register to another user
         '''
-        user = User.query.filter_by(name=field.data).first()
+        user = User.query.filter_by(username=field.data).first()
         if user:
             raise ValidationError("Username is taken!")
 

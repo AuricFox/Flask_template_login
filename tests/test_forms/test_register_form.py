@@ -4,7 +4,7 @@ from base_test import BaseTestCase, db
 
 from app.forms.register_form import RegisterForm
 
-from app.models.models import User
+from app.models.user import User
 
 
 class Test_Register_form(BaseTestCase):
@@ -140,7 +140,7 @@ class Test_Register_form(BaseTestCase):
         Tests for duplicate usernames
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='primary@test.com', 
             password='Test@User1'
         )
@@ -162,7 +162,7 @@ class Test_Register_form(BaseTestCase):
         Tests for duplicate emails
         '''
         user = User(
-            name='Test User1', 
+            username='Test User1', 
             email='testEmail@test.com', 
             password='Test@User1'
         )

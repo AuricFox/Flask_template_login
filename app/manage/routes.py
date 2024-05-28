@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect, request, flash
 
 from app.manage import bp
 from app.extensions import db
-from app.models.models import Models
+from app.models.default import Default_Model
 from app.app_utils import LOGGER, get_username
 
 from app.forms.default_form import DefaultForm
@@ -17,7 +17,7 @@ def index():
     Output(s):
         A rendered manage.html page
     '''
-    data = Models.query.all()
+    data = Default_Model.query.all()
     return render_template('./manage/manage.html', nav_id="manage-page", data=data, username=get_username())
 
 # ==============================================================================================================
@@ -33,7 +33,7 @@ def view(id):
         None, redirects to the view page
     '''
     # Get the data upon the first instance of the key
-    data = Models.query.filter_by(id=id).first()
+    data = Default_Model.query.filter_by(id=id).first()
     return render_template('./manage/view.html', nav_id="manage-page", data=data, username=get_username())
 
 # ==============================================================================================================
@@ -54,7 +54,7 @@ def add_info():
         if form.validate_on_submit():
 
             # Adding new data to the database
-            new_record = Models(
+            new_record = Default_Model(
                 name=form.name.data, 
                 date=form.date.data, 
                 message=form.message.data
@@ -86,7 +86,7 @@ def update_info(id):
         Redirects to the manage page if record was successfully added, else returns an edit page
     '''
     try:
-        record = Models.query.get(id)
+        record = Default_Model.query.get(id)
     
         # Check if the record exists
         if record is None:
@@ -131,7 +131,7 @@ def delete(id):
     '''
     try:
         # Query database for question and delete it
-        data = Models.query.filter_by(id=id).first()
+        data = Default_Model.query.filter_by(id=id).first()
 
         if data:
             # Delete the row data

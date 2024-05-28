@@ -2,7 +2,7 @@ from flask import request, render_template, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
 
-from app.models.models import User
+from app.models.user import User
 from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
 
@@ -104,7 +104,7 @@ def sign_up():
         if register_form.validate_on_submit():
             # Create new user
             new_user = User(
-                name=register_form.username.data, 
+                username=register_form.username.data, 
                 email=register_form.email.data, 
                 password=register_form.password.data
             )

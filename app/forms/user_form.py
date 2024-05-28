@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField, BooleanField, HiddenField
 from wtforms.validators import DataRequired, Optional, Length, ValidationError
 
-from app.models.models import User
+from app.models.user import User
 
 class UserForm(FlaskForm):
     '''
@@ -38,7 +38,7 @@ class UserForm(FlaskForm):
         Output(s):
             Raises validation error if the username is taken by another user
         '''
-        existing_user = User.query.filter(User.id != self.id.data, User.name == field.data).first()
+        existing_user = User.query.filter(User.id != self.id.data, User.username == field.data).first()
         if existing_user:
             raise ValidationError("Username already exists!")
 

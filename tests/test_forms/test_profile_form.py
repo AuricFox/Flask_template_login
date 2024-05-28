@@ -3,7 +3,7 @@ import unittest
 from base_test import BaseTestCase, db
 
 from app.forms.profile_form import ProfileForm
-from app.models.models import User
+from app.models.user import User
 
 class Test_Profile_Form(BaseTestCase):
 
@@ -12,7 +12,7 @@ class Test_Profile_Form(BaseTestCase):
         Tests the inputs for the profile form
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='testing@testing.com', 
             password='Test@User1'
         )
@@ -62,7 +62,7 @@ class Test_Profile_Form(BaseTestCase):
         Tests for missing username field in the profile form
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='testing@testing.com', 
             password='Test@User1'
         )
@@ -83,7 +83,7 @@ class Test_Profile_Form(BaseTestCase):
         Tests for missing email field in the profile form
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='testing@testing.com', 
             password='Test@User1'
         )
@@ -104,7 +104,7 @@ class Test_Profile_Form(BaseTestCase):
         Tests for missing password field in the profile form
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='testing@testing.com', 
             password='Test@User1'
         )
@@ -126,7 +126,7 @@ class Test_Profile_Form(BaseTestCase):
         Tests for missing confirmation password in the profile form
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='testing@testing.com', 
             password='Test@User1'
         )
@@ -148,7 +148,7 @@ class Test_Profile_Form(BaseTestCase):
         Tests for matching passwords in the profile form
         '''
         user = User(
-            name='Test User', 
+            username='Test User', 
             email='testing@testing.com', 
             password='Test@User1'
         )
@@ -171,14 +171,14 @@ class Test_Profile_Form(BaseTestCase):
         Tests for duplicate usernames
         '''
         user1 = User(
-            name='Test User1', 
+            username='Test User1', 
             email='testing1@testing.com', 
             password='Test@User1'
         )
         db.session.add(user1)
 
         user2 = User(
-            name='Test User2', 
+            username='Test User2', 
             email='testing2@testing.com', 
             password='Test@User2'
         )
@@ -200,14 +200,14 @@ class Test_Profile_Form(BaseTestCase):
         Tests for duplicate emails
         '''
         user1 = User(
-            name='Test User1', 
+            username='Test User1', 
             email='user1@testing.com', 
             password='Test@User1'
         )
         db.session.add(user1)
 
         user2 = User(
-            name='Test User2', 
+            username='Test User2', 
             email='testing2@testing.com', 
             password='Test@User2'
         )

@@ -2,7 +2,7 @@ from flask import request, render_template, redirect, url_for, flash
 from flask_login import login_required
 
 from app.admin import bp
-from app.models.models import User
+from app.models.user import User
 
 from app.forms.user_form import UserForm
 from app.app_utils import LOGGER, get_current_user, get_user_record
