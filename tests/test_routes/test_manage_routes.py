@@ -5,7 +5,7 @@ from flask import url_for
 from tests.base_test import BaseTestCase_Models
 
 # ==============================================================================================================
-# TEST MANAGE PAGE
+# TEST MAIN MANAGE PAGE
 # ==============================================================================================================
 class Test_Manage_Page(BaseTestCase_Models):
 

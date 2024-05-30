@@ -27,7 +27,7 @@ def index():
         admin = get_current_user()
         # Check if the current user has admin privileges
         if not admin.is_admin:
-            return redirect(url_for('main.index'))
+            return render_template('404.html'), 404
 
         users = get_user_record()
         return render_template('./admin/manage_users.html', nav_id="manage-user-page", users=users, username=admin.username)
@@ -53,7 +53,7 @@ def view_user(id):
         admin = get_current_user()
         # Check if the current user has admin privileges
         if not admin.is_admin:
-            return redirect(url_for('main.index'))
+            return render_template('404.html'), 404
 
         # Get the data upon the first instance of the key
         user = get_user_record(user_id=id)
@@ -61,8 +61,7 @@ def view_user(id):
     
     except Exception as e:
         LOGGER.error(f"An error occurred when viewing info on user {id}: {e}")
-        flash("Failed to access user profile", "error")
-        return redirect(url_for('admin.index'))
+        return render_template('404.html'), 404
 
 # ==============================================================================================================
 @bp.route('/update_user/<int:id>', methods=['GET','POST'])
@@ -81,12 +80,12 @@ def update_user(id):
         admin = get_current_user()
         # Check if the user has admin access
         if not admin.is_admin:
-            return redirect(url_for('main.index'))
+            return render_template('404.html'), 404
         
         user = User.query.get(id)
         # Check if the user record exists
         if user is None:
-            raise Exception(f"User ID '{id}' not found.")
+            return render_template('404.html'), 404
         
         form = UserForm(form=request.form)
         if form.validate_on_submit():
@@ -130,7 +129,7 @@ def delete_user(id):
     try:
         admin = get_current_user()
         if not admin.is_admin:
-            return redirect(url_for('auth.index'))
+            return render_template('404.html'), 404
         
         # Query database for question and delete it
         user = User.query.filter_by(id=id).first()
