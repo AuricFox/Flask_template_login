@@ -147,7 +147,6 @@ def delete(id):
         db.session.commit()
         LOGGER.info(f'Record deleted:\n{record}')
         flash("Successfully deleted record!", "error")
-            
     
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
