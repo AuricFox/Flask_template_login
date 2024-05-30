@@ -1,11 +1,11 @@
 import unittest
 
-from tests.base_test import BaseTestCase
+from tests.base_test import BaseTestCase_User
 
 from app.forms.login_form import LoginForm
 
 
-class Test_Login_form(BaseTestCase):
+class Test_Login_form(BaseTestCase_User):
 
     def test_1_login_form(self):
         '''

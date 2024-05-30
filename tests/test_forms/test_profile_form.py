@@ -1,11 +1,11 @@
 import unittest
 
-from tests.base_test import BaseTestCase
+from tests.base_test import BaseTestCase_User
 
 from app.forms.profile_form import ProfileForm
 from app.models.user import User
 
-class Test_Profile_Form(BaseTestCase):
+class Test_Profile_Form(BaseTestCase_User):
 
     def test_1_profile_form(self):
         '''

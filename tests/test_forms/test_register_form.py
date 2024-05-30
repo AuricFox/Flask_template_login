@@ -1,12 +1,12 @@
 import unittest
 
-from tests.base_test import BaseTestCase, db
+from tests.base_test import BaseTestCase_User, db
 
 from app.forms.register_form import RegisterForm
 from app.models.user import User
 
 
-class Test_Register_form(BaseTestCase):
+class Test_Register_form(BaseTestCase_User):
 
     def test_1_register_form(self):
         '''

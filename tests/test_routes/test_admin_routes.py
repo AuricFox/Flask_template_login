@@ -3,9 +3,9 @@ import unittest
 from flask import url_for
 from flask_login import current_user
 
-from tests.base_test import BaseTestCase
+from tests.base_test import BaseTestCase_User
 
-class Test_Admin_Pages(BaseTestCase):
+class Test_Admin_Pages(BaseTestCase_User):
 
     def test_manage_usgers_page(self):
         '''

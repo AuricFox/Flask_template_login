@@ -3,9 +3,9 @@ import unittest
 from flask import url_for
 from flask_login import current_user
 
-from tests.base_test import BaseTestCase
+from tests.base_test import BaseTestCase_User
 
-class Test_Auth_Pages(BaseTestCase):
+class Test_Login(BaseTestCase_User):
 
     def test_login_page(self):
         '''
@@ -68,7 +68,10 @@ class Test_Auth_Pages(BaseTestCase):
             self.assertEqual(response.status_code, 302)
             self.assertFalse(current_user.is_authenticated)
             self.assertIn(b"home", response.data)
-    # ==============================================================================================================
+
+
+class Test_Sign_up(BaseTestCase_User):
+
     def test_signup_page(self):
         '''
         Tests the retrieval of the registration page
