@@ -95,8 +95,7 @@ def update_info(id):
     
         # Check if the record exists
         if record is None:
-            flash("Record not found.")
-            return redirect(request.referrer or url_for('manage.index'))
+            return render_template('404.html'), 404
     
         # Get form data and varify contents
         form = DefaultForm(form=request.form)
@@ -136,17 +135,19 @@ def delete(id):
     '''
     try:
         # Query database for question and delete it
-        data = Default_Model.query.filter_by(id=id).first()
+        record = Default_Model.query.filter_by(id=id).first()
 
-        if data:
-            # Delete the row data
-            db.session.delete(data)
-            db.session.commit()
-            LOGGER.info(f'Record deleted:\n{data}')
-            flash("Successfully deleted record!", "error")
-        else:
-            LOGGER.error(f'An error occurred when deleting record: {e}')
-            flash("Failed to delete record", "error")
+        # Check if the record exists
+        if not record:
+            flash("Record not found!", "error")
+            return render_template('404.html'), 404
+        
+        # Delete the row data
+        db.session.delete(record)
+        db.session.commit()
+        LOGGER.info(f'Record deleted:\n{record}')
+        flash("Successfully deleted record!", "error")
+            
     
     except Exception as e:
         LOGGER.error(f'An Error occured when deleting the record: {str(e)}')
