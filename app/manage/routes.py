@@ -32,9 +32,14 @@ def view(id):
     Output(s):
         None, redirects to the view page
     '''
-    # Get the data upon the first instance of the key
-    data = Default_Model.query.filter_by(id=id).first()
-    return render_template('./manage/view.html', nav_id="manage-page", data=data, username=get_username())
+    try:
+        # Get the data upon the first instance of the key
+        data = Default_Model.query.filter_by(id=id).first()
+        return render_template('./manage/view.html', nav_id="manage-page", data=data, username=get_username())
+    except Exception as e:
+        LOGGER.error(f"An error occurred when viewing ID = {id}: {e}")
+        return render_template('404.html'), 404
+
 
 # ==============================================================================================================
 @bp.route('/add_info', methods=['GET', 'POST'])
