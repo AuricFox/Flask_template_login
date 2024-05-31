@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
-from flask_login import login_required
+from flask_login import login_required, logout_user
 
 from app.profile import bp
 from app.app_utils import LOGGER, get_current_user, update_user_record, delete_user_record
@@ -93,6 +93,8 @@ def delete_profile():
         status = delete_user_record(user_id=user.id)
 
         if status:
+            logout_user()
+            flash("Profile deleted successfully!", "success")
             return redirect(url_for('main.index'))
         else:
             raise Exception("Deletion failed")
