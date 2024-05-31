@@ -3,7 +3,7 @@ import unittest
 from tests.base_test import BaseTestCase_User
 
 from app.forms.profile_form import ProfileForm
-from app.models.user import User
+
 
 class Test_Profile_Form(BaseTestCase_User):
 
@@ -11,12 +11,10 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests the inputs for the profile form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = ProfileForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
-            'email': 'testing@testing.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -30,7 +28,7 @@ class Test_Profile_Form(BaseTestCase_User):
         form = ProfileForm(data={
             'id': '100',
             'username': 'Test User',
-            'email': 'testing@testing.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -44,7 +42,7 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         form = ProfileForm(data={
             'username': 'Test User',
-            'email': 'testing@testing.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -55,11 +53,9 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for missing username field in the profile form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = ProfileForm(data={
-            'id': user.id,
-            'email': 'testing@testing.com',
+            'id': '1',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -70,10 +66,8 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for missing email field in the profile form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = ProfileForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
@@ -85,12 +79,10 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for missing password field in the profile form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = ProfileForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
-            'email': 'testing@testing.com',
+            'email': 'user@testing.com',
             'confirm': 'Test@User1'
         })
         self.assertFalse(form.validate())
@@ -101,12 +93,10 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for missing confirmation password in the profile form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = ProfileForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
-            'email': 'testing@testing.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1'
         })
         self.assertFalse(form.validate())
@@ -117,12 +107,10 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for matching passwords in the profile form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = ProfileForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
-            'email': 'testing@testing.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'No1@match'
         })
@@ -134,10 +122,8 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for duplicate usernames
         '''
-        user2 = User.query.filter_by(username='Test User2').first()
-
         form = ProfileForm(data={
-            'id': user2.id,
+            'id': '2',
             'username': 'Test User1',
             'email': 'testing2@testing.com',
             'password': 'Test@User2',
@@ -151,10 +137,8 @@ class Test_Profile_Form(BaseTestCase_User):
         '''
         Tests for duplicate emails
         '''
-        user2 = User.query.filter_by(username='Test User2').first()
-
         form = ProfileForm(data={
-            'id': user2.id,
+            'id': '2',
             'username': 'Test User2',
             'email': 'user1@testing.com',
             'password': 'Test@User2',

@@ -1,9 +1,8 @@
 import unittest
 
-from tests.base_test import BaseTestCase_User, db
+from tests.base_test import BaseTestCase_User
 
 from app.forms.register_form import RegisterForm
-from app.models.user import User
 
 
 class Test_Register_form(BaseTestCase_User):
@@ -14,7 +13,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test User',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -26,7 +25,7 @@ class Test_Register_form(BaseTestCase_User):
         Tests missing username field from the register form
         '''
         form = RegisterForm(data={
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -51,7 +50,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test User',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'confirm': 'Test@User1'
         })
         self.assertFalse(form.validate())
@@ -63,7 +62,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test User',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1'
         })
         self.assertFalse(form.validate())
@@ -75,7 +74,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -88,7 +87,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'T' * 102,
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1'
         })
@@ -101,7 +100,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test User',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'T@u1',
             'confirm': 'T@u1'
         })
@@ -114,7 +113,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test User',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'T@u1' + 't' * 100,
             'confirm': 'T@u1' + 't' * 100
         })
@@ -127,7 +126,7 @@ class Test_Register_form(BaseTestCase_User):
         '''
         form = RegisterForm(data={
             'username': 'Test User',
-            'email': 'testEmail@test.com',
+            'email': 'user@testing.com',
             'password': 'Test@User1',
             'confirm': 'Mismatch@User1'
         })
@@ -138,17 +137,9 @@ class Test_Register_form(BaseTestCase_User):
         '''
         Tests for duplicate usernames
         '''
-        user = User(
-            username='Test User', 
-            email='primary@test.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
-
         form = RegisterForm(data={
-            'username': 'Test User',
-            'email': 'secondary@test.com',
+            'username': 'Test User2',
+            'email': 'user@testing.com',
             'password': 'Test@User2',
             'confirm': 'Test@User2'
         })
@@ -160,17 +151,9 @@ class Test_Register_form(BaseTestCase_User):
         '''
         Tests for duplicate emails
         '''
-        user = User(
-            username='Test User1', 
-            email='testEmail@test.com', 
-            password='Test@User1'
-        )
-        db.session.add(user)
-        db.session.commit()
-
         form = RegisterForm(data={
-            'username': 'Test User2',
-            'email': 'testEmail@test.com',
+            'username': 'Test User',
+            'email': 'user2@testing.com',
             'password': 'Test@User2',
             'confirm': 'Test@User2'
         })

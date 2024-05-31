@@ -3,7 +3,7 @@ import unittest
 from tests.base_test import BaseTestCase_User
 
 from app.forms.user_form import UserForm
-from app.models.user import User
+
 
 class Test_User_Form(BaseTestCase_User):
 
@@ -11,10 +11,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests the inputs for the user form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
             'email': 'testing@testing.com',
             'password': 'Test@User1',
@@ -58,10 +56,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for missing username field in the user form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id,
+            'id': '1',
             'email': 'testing@testing.com',
             'password': 'Test@User1',
             'confirm': 'Test@User1',
@@ -74,10 +70,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for missing email field in the user form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
             'password': 'Test@User1',
             'confirm': 'Test@User1',
@@ -90,10 +84,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for missing password field in the user form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
             'email': 'testing@testing.com',
             'confirm': 'Test@User1',
@@ -107,10 +99,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for missing confirmation password in the user form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
             'email': 'testing@testing.com',
             'password': 'Test@User1',
@@ -124,10 +114,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for matching passwords in the user form
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id,
+            'id': '1',
             'username': 'Test User',
             'email': 'testing@testing.com',
             'password': 'Test@User1',
@@ -142,10 +130,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for duplicate usernames
         '''
-        user2 = User.query.filter_by(username='Test User2').first()
-
         form = UserForm(data={
-            'id': user2.id,
+            'id': '2',
             'username': 'Test User1',
             'email': 'testing2@testing.com',
             'password': 'Test@User2',
@@ -160,10 +146,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for duplicate emails
         '''
-        user2 = User.query.filter_by(username='Test User2').first()
-
         form = UserForm(data={
-            'id': user2.id,
+            'id': '2',
             'username': 'Test User2',
             'email': 'user1@testing.com',
             'password': 'Test@User2',
@@ -178,10 +162,8 @@ class Test_User_Form(BaseTestCase_User):
         '''
         Tests for all optional fields removed
         '''
-        user = User.query.filter_by(username='Test User1').first()
-
         form = UserForm(data={
-            'id': user.id
+            'id': '1'
         })
         self.assertTrue(form.validate())
 
