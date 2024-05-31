@@ -87,7 +87,14 @@ execute the following command in the terminal from the base directory:
 python commands.py test
 ```
 
-You should see all the tests being executed followed by the number of tests run and the status.
+You should see all the tests being executed followed by the number of tests run and the status. Form and Route test can be run individually 
+by executing one of the following commands:
+```
+python commands.py test_forms
+```
+```
+python commands.py test_routes
+```
 
 ## File Structure
 
