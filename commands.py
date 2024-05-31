@@ -1,5 +1,5 @@
 from getpass import getpass
-import unittest
+import unittest, click
 from datetime import datetime
 
 from flask.cli import FlaskGroup
@@ -11,6 +11,9 @@ from app.models.default import Default_Model
 
 cli = FlaskGroup(app)
 
+# ==============================================================================================================
+# TEST COMMANDS
+# ==============================================================================================================
 @cli.command("test")
 def test():
     '''
@@ -23,35 +26,60 @@ def test():
         return 0
     else:
         return 1
-
 # ==============================================================================================================
 @cli.command("test_routes")
-def test_routes():
+@click.argument('file_name', required=False)
+def test_routes(file_name):
     '''
     Runs the unit tests for routes
     '''
-    tests = unittest.TestLoader().discover("tests/test_routes")
+    if not file_name:
+        tests = unittest.TestLoader().discover("tests/test_routes")
+    elif file_name == 'defualt':
+        tests = unittest.TestLoader().discover("tests/test_routes", pattern="test_defualt_routes.py")
+    elif file_name == 'login':
+        tests = unittest.TestLoader().discover("tests/test_routes", pattern="test_login_routes.py")
+    elif file_name == 'profile':
+        tests = unittest.TestLoader().discover("tests/test_routes", pattern="test_profile_routes.py")
+    elif file_name == 'register':
+        tests = unittest.TestLoader().discover("tests/test_routes", pattern="test_register_routes.py")
+    elif file_name == 'user':
+        tests = unittest.TestLoader().discover("tests/test_routes", pattern="test_user_routes.py")
+    
     result = unittest.TextTestRunner(verbosity=2).run(tests)
 
     if result.wasSuccessful():
         return 0
     else:
         return 1
-    
 # ==============================================================================================================
 @cli.command("test_forms")
-def test_forms():
+@click.argument('file_name', required=False)
+def test_forms(file_name):
     '''
-    Runs the unit tests for routes
+    Runs the unit tests for forms
     '''
-    tests = unittest.TestLoader().discover("tests/test_forms")
+    if not file_name:
+        tests = unittest.TestLoader().discover("tests/test_forms")
+    elif file_name == 'defualt':
+        tests = unittest.TestLoader().discover("tests/test_forms", pattern="test_defualt_form.py")
+    elif file_name == 'login':
+        tests = unittest.TestLoader().discover("tests/test_forms", pattern="test_login_form.py")
+    elif file_name == 'profile':
+        tests = unittest.TestLoader().discover("tests/test_forms", pattern="test_profile_form.py")
+    elif file_name == 'register':
+        tests = unittest.TestLoader().discover("tests/test_forms", pattern="test_register_form.py")
+    elif file_name == 'user':
+        tests = unittest.TestLoader().discover("tests/test_forms", pattern="test_user_form.py")
+    
     result = unittest.TextTestRunner(verbosity=2).run(tests)
 
     if result.wasSuccessful():
         return 0
     else:
         return 1
-    
+# ==============================================================================================================
+# INPUT COMMANDS
 # ==============================================================================================================
 @cli.command("add_admin")
 def add_admin():
@@ -91,7 +119,6 @@ def add_admin():
 
     except Exception as e:
         print(f"An error occurred when adding admin account: {e}")
-
 # ==============================================================================================================
 @cli.command("add_data")
 def add_data():
@@ -128,6 +155,7 @@ def add_data():
 
     except Exception as e:
         print(f"An error occurred when adding data: {e}")
-    
+
+
 if __name__ == "__main__":
     cli()
