@@ -2,7 +2,7 @@ import unittest
 
 from tests.base_test import BaseTestCase_User
 
-from app.forms.register_form import RegisterForm
+from app.forms.base_form import RegisterForm
 
 
 class Test_Register_form(BaseTestCase_User):
@@ -144,7 +144,7 @@ class Test_Register_form(BaseTestCase_User):
             'confirm': 'Test@User2'
         })
         self.assertFalse(form.validate())
-        self.assertIn('Username is taken!', form.username.errors)
+        self.assertIn('Username already exists!', form.username.errors)
 
     #-----------------------------------------------------------------------------------------------------------
     def test_11_register_form(self):
@@ -158,7 +158,7 @@ class Test_Register_form(BaseTestCase_User):
             'confirm': 'Test@User2'
         })
         self.assertFalse(form.validate())
-        self.assertIn('Email is taken!', form.email.errors)
+        self.assertIn('Email address already exists!', form.email.errors)
 
 
 if __name__ == "__main__":

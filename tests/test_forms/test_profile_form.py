@@ -2,7 +2,7 @@ import unittest
 
 from tests.base_test import BaseTestCase_User
 
-from app.forms.profile_form import ProfileForm
+from app.forms.base_form import ProfileForm
 
 
 class Test_Profile_Form(BaseTestCase_User):

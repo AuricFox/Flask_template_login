@@ -2,7 +2,7 @@ import unittest
 
 from tests.base_test import BaseTestCase_User
 
-from app.forms.user_form import UserForm
+from app.forms.base_form import UserForm
 
 
 class Test_User_Form(BaseTestCase_User):
