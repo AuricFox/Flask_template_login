@@ -4,7 +4,7 @@ from flask_login import login_required
 from app.admin import bp
 from app.models.user import User
 
-from app.forms.user_form import UserForm
+from app.forms.base_form import UserForm
 from app.app_utils import LOGGER, get_current_user, get_user_record
 from app.extensions import bcrypt, db
 

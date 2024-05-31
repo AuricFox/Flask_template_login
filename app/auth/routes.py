@@ -6,7 +6,7 @@ from app.models.user import User
 from app.extensions import db, bcrypt
 from app.app_utils import LOGGER
 
-from app.forms.register_form import RegisterForm
+from app.forms.base_form import RegisterForm
 from app.forms.login_form import LoginForm
 
 # ==============================================================================================================

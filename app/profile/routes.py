@@ -3,7 +3,7 @@ from flask_login import login_required, logout_user
 
 from app.profile import bp
 from app.app_utils import LOGGER, get_current_user, update_user_record, delete_user_record
-from app.forms.profile_form import ProfileForm
+from app.forms.base_form import ProfileForm
 
 # ==============================================================================================================
 # User Profile Pages
