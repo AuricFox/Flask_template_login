@@ -2,6 +2,8 @@
 
 A Flask template used for starting web projects that supports user registration and login. It provides basic navigation for main pages, sub pages, and a side bar for related topics. The database is maintained using SQLAlchemy which currently supports a default table called Models and a User table.
 
+![Home Page](home_page.jpg "Home Page")
+
 ## Getting Started
 
 To get started, follow these steps:
